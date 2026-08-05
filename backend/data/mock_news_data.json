@@ -1,0 +1,492 @@
+[
+  {
+    "id": "story-001",
+    "title": "Breakthrough: Quantum Supremacy Achieved in Room-Temp Semiconductors",
+    "category": "Quantum & Tech",
+    "readTime": "1 min read",
+    "publishedAt": "10 mins ago",
+    "source": "MIT Technology Review",
+    "originalUrl": "https://techreview.com/quantum-room-temp-breakthrough",
+    "summary60w": [
+      "Physicists at Oxford and MIT have demonstrated quantum supremacy using a novel room-temperature semiconductor alloy.",
+      "The processor completed a molecular simulation in 14 seconds that would take supercomputers 4,000 years.",
+      "This breakthrough eliminates the need for expensive liquid helium cryogenic refrigeration in quantum datacenters.",
+      "Commercial rollout is projected for 2028, targeting drug discovery, materials science, and cryptography."
+    ],
+    "summaryEli5": [
+      "Scientists built a super-fast quantum computer chip that doesn't need freezing cold fridges to work.",
+      "It solved a massive science riddle in seconds instead of thousands of years!",
+      "This means future computers might design new medicine and batteries in hours instead of decades."
+    ],
+    "summaryDeepDive": "A landmark achievement in quantum computing has been published in Nature Physics today. Researchers from Oxford and MIT successfully ran a 128-qubit algorithm on a diamond-nitrogen semiconductor at 22°C (room temperature). Traditionally, quantum processing units require cryogenic temperatures hovering near absolute zero (-273°C) to prevent thermal decoherence. The team utilized topological surface state protection to maintain quantum coherence for over 1.2 milliseconds—more than sufficient to solve complex protein folding matrix equations. Industry analysts estimate this could reduce quantum datacenter operational overhead by 92%.",
+    "translations": {
+      "hi": {
+        "title": "सफलता: रूम-टेंपरेचर सेमीकंडक्टर्स में क्वांटम सर्वोच्चता हासिल की गई",
+        "summary60w": [
+          "ऑक्सफोर्ड और एमआईटी के भौतिकविदों ने कमरे के तापमान पर चलने वाले सेमीकंडक्टर का उपयोग करके क्वांटम सर्वोच्चता का प्रदर्शन किया।",
+          "प्रोसेसर ने 14 सेकंड में आणविक सिमुलेशन पूरा किया जिसे सुपरकंप्यूटर में 4,000 साल लगते।",
+          "यह खोज क्वांटम डेटासेंटर में महंगी लिक्विड हीलियम कूलिंग की आवश्यकता को समाप्त करती है।",
+          "2028 के लिए वाणिज्यिक लॉन्च का अनुमान है, जो दवा खोज और सामग्री विज्ञान को लक्षित करेगा।"
+        ],
+        "summaryEli5": [
+          "वैज्ञानिकों ने एक ऐसा क्वांटम कंप्यूटर बनाया है जिसे ठंडा रखने के लिए बर्फ जैसे फ्रिज की जरूरत नहीं है।",
+          "इसने हजारों सालों में होने वाली गणना को कुछ ही सेकंड में हल कर दिया!"
+        ],
+        "summaryDeepDive": "ऑक्सफोर्ड और एमआईटी के वैज्ञानिकों ने कमरे के तापमान (22°C) पर 128-क्यूबिट एल्गोरिदम सफलतापूर्वक चलाया। इस सफलता से क्वांटम डेटा सेंटरों की परिचालन लागत 92% तक कम हो सकती है।"
+      },
+      "es": {
+        "title": "Avance: Supremacía Cuántica Lograda en Semiconductores a Temperatura Ambiente",
+        "summary60w": [
+          "Físicos de Oxford y el MIT han demostrado la supremacía cuántica usando una aleación semiconductora a temperatura ambiente.",
+          "El procesador completó una simulación molecular en 14 segundos que tomaría 4.000 años a una supercomputadora.",
+          "Este avance elimina la necesidad de refrigeración criogénica costosa en centros de datos cuánticos.",
+          "El despliegue comercial está previsto para 2028, orientado a la ciencia de materiales y medicamentos."
+        ],
+        "summaryEli5": [
+          "Los científicos crearon un chip cuántico súper rápido que funciona sin necesidad de congeladores helados.",
+          "¡Resolvió un acertijo científico en segundos en lugar de miles de años!"
+        ],
+        "summaryDeepDive": "Investigadores de Oxford y el MIT ejecutaron con éxito un algoritmo de 128 cúbits en un semiconductor de diamante a 22 °C. Se proyecta que esto reduzca los costos de centros de datos cuánticos en un 92%."
+      },
+      "ja": {
+        "title": "画期的な偉業：常温半導体で量子超越性を達成",
+        "summary60w": [
+          "オックスフォードとMITの物理学者が、室温で動作する半導体を使用した量子超越性を実証しました。",
+          "スーパーコンピューターで4,000年かかる分子シミュレーションをわずか14秒で完了しました。",
+          "量子データセンターにおける高価な液体ヘリウム極低温冷却が不要になります。",
+          "商用化は2028年を予定しており、創薬や材料科学への応用が期待されます。"
+        ],
+        "summaryEli5": [
+          "科学者たちは、極冷の冷却装置を必要としない超高速量子コンピューターを開発しました。",
+          "何千年もかかる複雑な計算をたった14秒で解決しました！"
+        ],
+        "summaryDeepDive": "オックスフォードとMITの研究チームは、22°Cの室温で128量子ビットのアルゴリズムを実行することに成功しました。これにより量子データセンターのコストが92%削減される見込みです。"
+      },
+      "de": {
+        "title": "Durchbruch: Quantenüberlegenheit in Raumtemperatur-Halbleitern erreicht",
+        "summary60w": [
+          "Physiker in Oxford und am MIT haben die Quantenüberlegenheit mit einer Raumtemperatur-Halbleiterlegierung demonstriert.",
+          "Der Prozessor schloss eine Molekularsimulation in 14 Sekunden ab, für die Supercomputer 4.000 Jahre bräuchten.",
+          "Dieser Durchbruch eliminiert die Notwendigkeit teurer flüssiger Helium-Kühlung in Quantenrechenzentren.",
+          "Die kommerzielle Einführung ist für 2028 geplant, Zielgruppen sind Medikamentenentwicklung und Materialwissenschaft."
+        ],
+        "summaryEli5": [
+          "Wissenschaftler haben einen superschnellen Quantenchip gebaut, der keine eisigen Kühlschränke braucht.",
+          "Er hat ein riesiges Rätsel in Sekunden gelöst, anstatt in tausenden von Jahren!"
+        ],
+        "summaryDeepDive": "Forscher aus Oxford und vom MIT führten erfolgreich einen 128-Qubit-Algorithmus bei 22 °C Raumtemperatur aus. Dies könnte die Betriebskosten von Quantenrechenzentren um 92 % senken."
+      }
+    },
+    "biasRating": "Neutral",
+    "biasScore": 92,
+    "perspectives": [
+      { "perspective": "Quantum Physics Community", "sentiment": "Triumphant breakthrough with peer verification." },
+      { "perspective": "Hardware Manufacturers", "sentiment": "Cautiously optimistic on scaling semiconductor yield." },
+      { "perspective": "Cybersecurity Analysts", "sentiment": "Urgent call to transition to post-quantum encryption." }
+    ],
+    "smartGlossary": [
+      {
+        "term": "quantum supremacy",
+        "definition": "The point where a quantum computer performs a calculation that no classical supercomputer can complete in a reasonable timeframe."
+      },
+      {
+        "term": "decoherence",
+        "definition": "The loss of quantum state coherence when qubits interact with external environmental thermal noise."
+      },
+      {
+        "term": "qubit",
+        "definition": "The basic unit of quantum information, capable of representing 0, 1, or both simultaneously via superposition."
+      }
+    ],
+    "voiceAudioText": "Breakthrough: Quantum Supremacy Achieved in Room Temperature Semiconductors. Physicists at Oxford and MIT have demonstrated quantum supremacy using a novel semiconductor alloy operating at 22 degrees Celsius."
+  },
+  {
+    "id": "story-002",
+    "title": "Fusion Energy Milestone: Tokamak Sustains Net Power Output for 72 Hours",
+    "category": "Energy & Climate",
+    "readTime": "2 min read",
+    "publishedAt": "45 mins ago",
+    "source": "Nature Energy",
+    "originalUrl": "https://nature.com/articles/fusion-tokamak-net-power-72h",
+    "summary60w": [
+      "The SPARC magnet fusion reactor reached Q-factor of 11.4, generating 500MW of sustained clean energy.",
+      "High-temperature superconducting (HTS) magnets contained 150-million-degree plasma without magnetic drift.",
+      "Grid integration tests successfully delivered surplus power directly to 250,000 municipal homes.",
+      "Clean energy consortiums hail this as the definitive end of fossil-fuel baseload dependence."
+    ],
+    "summaryEli5": [
+      "Scientists trapped a mini-sun inside a magnetic bottle for 3 whole days!",
+      "It created way more clean electricity than it used, powering an entire city with zero pollution."
+    ],
+    "summaryDeepDive": "Engineers at Commonwealth Fusion Systems and MIT have announced a continuous 72-hour sustained fusion reaction with net positive energy gain (Q > 10). Utilizing REBCO (Rare-Earth Barium Copper Oxide) superconducting magnets running at 20 Tesla, the reactor stabilized plasma instabilities that previously limited confinement times to seconds. Heat exchangers extracted thermal output at 850°C, driving high-efficiency steam turbines that supplied continuous power to the regional electrical grid.",
+    "translations": {
+      "hi": {
+        "title": "फ्यूजन ऊर्जा में नया कीर्तिमान: टोकामैक ने 72 घंटे तक शुद्ध बिजली उत्पादन किया",
+        "summary60w": [
+          "SPARC फ्यूजन रिएक्टर ने 11.4 का Q-फैक्टर हासिल किया, जिससे 500MW स्वच्छ ऊर्जा उत्पन्न हुई।",
+          "उच्च तापमान सुपरकंडक्टिंग मैग्नेट ने 15 करोड़ डिग्री प्लाज्मा को नियंत्रित रखा।",
+          "ग्रिड एकीकरण परीक्षण ने 2,50,000 घरों को सीधे अतिरिक्त बिजली प्रदान की।",
+          "स्वच्छ ऊर्जा समूहों ने इसे जीवाश्म ईंधन पर निर्भरता का अंत बताया है।"
+        ],
+        "summaryEli5": [
+          "वैज्ञानिकों ने एक छोटे सूरज को 3 दिनों तक चुंबकीय बोतल में बंद रखा!",
+          "इसने बिना किसी प्रदूषण के एक पूरे शहर को बिजली दी।"
+        ],
+        "summaryDeepDive": "MIT के इंजीनियरों ने 72 घंटे तक निरंतर फ्यूजन रिएक्शन चालू रखा, जिसने 250,000 घरों को स्वच्छ ऊर्जा प्रदान की।"
+      },
+      "es": {
+        "title": "Hito en Energía de Fusión: El Tokamak Mantiene Salida de Energía Neta por 72 Horas",
+        "summary60w": [
+          "El reactor SPARC alcanzó un factor Q de 11,4, generando 500 MW de energía limpia continua.",
+          "Imanes superconductores de alta temperatura confinaron plasma a 150 millones de grados.",
+          "Las pruebas entregaron electricidad directa a 250.000 hogares.",
+          "Expertos califican este evento como el hito definitivo para sustituir los combustibles fósiles."
+        ],
+        "summaryEli5": [
+          "¡Los científicos encerraron un pequeño sol en una botella magnética durante 3 días!",
+          "Creó mucha energía limpia y alimentó a toda una ciudad sin contaminar."
+        ],
+        "summaryDeepDive": "El reactor de fusión logró 72 horas continuas de ganancia neta de energía, alimentando redes eléctricas regionales sin emisión de carbono."
+      },
+      "ja": {
+        "title": "核融合エネルギーの金字塔：トカマク型炉が72時間の純出力維持に成功",
+        "summary60w": [
+          "SPARC核融合炉がQ値11.4を達成し、500MWの持続可能なクリーンエネルギーを生成しました。",
+          "高温超伝導マグネットが1億5000万度のプラズマを安定維持することに成功しました。",
+          "電力網への接続テストで、25万世帯に直接余剰電力を供給しました。",
+          "化石燃料依存の脱却に向けた決定的な一歩と評されています。"
+        ],
+        "summaryEli5": [
+          "科学者たちが人工の小さな太陽を3日間安定して閉じ込めることに成功しました！",
+          "街全体の家庭に汚染ゼロのクリーンな電気を届けました。"
+        ],
+        "summaryDeepDive": "SPARC核融合炉は72時間の連続核融合反応を維持し、Q>10のエネルギー増幅率で電力網へ電力を供給しました。"
+      },
+      "de": {
+        "title": "Fusionsenergie-Meilenstein: Tokamak hält 72 Stunden lang Netto-Energieabgabe aufrecht",
+        "summary60w": [
+          "Der SPARC-Fusionsreaktor erreichte einen Q-Faktor von 11,4 und erzeugte 500 MW saubere Energie.",
+          "Hochtemperatur-Supraleitermagnete schlossen 150 Millionen Grad heißes Plasma stabil ein.",
+          "Netzintegrationstests versorgten 250.000 Haushalte erfolgreich mit Strom.",
+          "Konsortien für saubere Energie feiern dies als Ende der Abhängigkeit von fossilen Brennstoffen."
+        ],
+        "summaryEli5": [
+          "Wissenschaftler haben 3 Tage lang eine kleine Sonne in einer Magnetflasche eingefangen!",
+          "Sie erzeugte riesige Mengen sauberen Stroms für eine ganze Stadt."
+        ],
+        "summaryDeepDive": "Der Fusionsreaktor SPARC zeigte eine 72-stündige kontinuierliche Fusionsreaktion mit signifikantem Nettoenergiegewinn."
+      }
+    },
+    "biasRating": "Optimistic",
+    "biasScore": 88,
+    "perspectives": [
+      { "perspective": "Clean Energy Advocates", "sentiment": "Historical turning point for global decarbonization." },
+      { "perspective": "Grid Utility Operators", "sentiment": "Demands upgraded high-voltage DC distribution infrastructure." },
+      { "perspective": "Economic Analysts", "sentiment": "Predicts multi-trillion dollar shift in global energy markets." }
+    ],
+    "smartGlossary": [
+      {
+        "term": "Q-factor",
+        "definition": "The ratio of fusion energy produced to the energy required to heat and maintain the plasma."
+      },
+      {
+        "term": "plasma",
+        "definition": "The fourth state of matter consisting of superheated ionized gas where electrons are stripped from nuclei."
+      },
+      {
+        "term": "Tokamak",
+        "definition": "A magnetic confinement device shaped like a torus designed to contain high-temperature fusion plasma."
+      }
+    ],
+    "voiceAudioText": "Fusion Energy Milestone: Tokamak Sustains Net Power Output for 72 Hours. The SPARC magnet fusion reactor reached a record Q-factor of 11.4, generating 500 megawatts of clean energy."
+  },
+  {
+    "id": "story-003",
+    "title": "AI Medical Agent Discovers Broad-Spectrum Synthetic Antibiotic 'Abyssicin-X'",
+    "category": "Biotech & AI",
+    "readTime": "1 min read",
+    "publishedAt": "2 hours ago",
+    "source": "Lancet Digital Health",
+    "originalUrl": "https://thelancet.com/ai-antibiotic-abyssicin-discovery",
+    "summary60w": [
+      "Autonomous generative AI model screened 42 million synthetic peptide candidates in 36 hours.",
+      "The compound 'Abyssicin-X' kills multidrug-resistant superbugs including MRSA and Pseudomonas.",
+      "Unlike traditional antibiotics, Abyssicin-X disrupts bacterial cell wall lipid electrostatic anchors.",
+      "Pre-clinical animal trials showed 99.4% pathogen eradication with zero organ cytotoxicity."
+    ],
+    "summaryEli5": [
+      "A smart AI doctor searched millions of chemical recipes in just a day and a half.",
+      "It discovered a powerful new medicine that destroys superbug bacteria that doctors couldn't cure before!",
+      "It works safely without hurting human cells."
+    ],
+    "summaryDeepDive": "Researchers utilizing a deep diffusion neural architecture named BioGen-Alpha identified a novel non-ribosomal peptide dubbed Abyssicin-X. The AI model was trained on bacterial membrane topology and electrostatic interaction maps. Abyssicin-X targets lipid II and lipoteichoic acid simultaneously, preventing bacteria from evolving single-gene resistance mutations. In vivo mouse trials for septic shock demonstrated rapid bactericidal clearance within 4 hours.",
+    "translations": {
+      "hi": {
+        "title": "AI मेडिकल एजेंट ने एंटीबायोटिक 'Abyssicin-X' की खोज की",
+        "summary60w": [
+          "स्वायत्त AI मॉडल ने 36 घंटों में 4.2 करोड़ सिंथेटिक पेप्टाइड्स का विश्लेषण किया।",
+          "यौगिक 'Abyssicin-X' एमआरएसए जैसे सुपरबग्स को नष्ट करता है।",
+          "यह नया यौगिक जीवाणु कोशिका भित्ति के लिपिड एंकर को तोड़ता है।",
+          "प्री-क्लीनिकल परीक्षणों में 99.4% रोगाणु उन्मूलन दिखाया गया।"
+        ],
+        "summaryEli5": [
+          "एक रोबोट डॉक्टर ने डेढ़ दिन में एक नई दवा खोजी जो खतरनाक बैक्टीरिया को खत्म करती है।"
+        ],
+        "summaryDeepDive": "BioGen-Alpha AI मॉडल ने Abyssicin-X की खोज की जो सुपरबग्स के खिलाफ 99.4% प्रभावी पाया गया।"
+      },
+      "es": {
+        "title": "Agente Médico de IA Descubre el Antibiótico Sintético 'Abyssicin-X'",
+        "summary60w": [
+          "Un modelo de IA generativa evaluó 42 millones de péptidos sintéticos en 36 horas.",
+          "El compuesto 'Abyssicin-X' destruye superbacterias resistentes como SARM.",
+          "Altera los anclajes electrostáticos de la pared celular bacteriana.",
+          "Pruebas preclínicas mostraron un 99,4% de erradicación sin toxicidad."
+        ],
+        "summaryEli5": [
+          "Una IA súper inteligente encontró un remedio contra bacterias peligrosas que antes eran invencibles."
+        ],
+        "summaryDeepDive": "Abyssicin-X fue descubierto mediante IA y elimina infecciones bacterianas severas con mínima resistencia."
+      },
+      "ja": {
+        "title": "医療AIエージェントが広範スペクトル合成抗菌薬「アビシシンX」を発見",
+        "summary60w": [
+          "自律型AIモデルが36時間で4,200万種類の合成ペプチド候補をスクリーニングしました。",
+          "「アビシシンX」はMRSAを含む多剤耐性スーパーバグを無力化します。",
+          "細菌の細胞壁脂質アンカーを物理的に破壊するため耐性がつきにくい構造です。",
+          "前臨床試験で細胞毒性ゼロで99.4%の病原体排除が確認されました。"
+        ],
+        "summaryEli5": [
+          "AIのお医者さんロボットが、どんな薬も効かなかったスーパーバイキンをやっつける新薬を発見しました！"
+        ],
+        "summaryDeepDive": "BioGen-Alpha AIによって開発されたAbyssicin-Xは、既存の抗生物質耐性を克服する革新的な分子です。"
+      },
+      "de": {
+        "title": "KI-Medizinagent entdeckt synthetisches Breitbandantibiotikum 'Abyssicin-X'",
+        "summary60w": [
+          "Ein KI-Modell analysierte 42 Millionen Peptidkandidaten in nur 36 Stunden.",
+          "Die Verbindung 'Abyssicin-X' tötet multiresistente Erreger wie MRSA ab.",
+          "Es zerstört die elektrostatischen Anker der Bakterienzellwand.",
+          "Vorklinische Tests zeigten 99,4 % Erregereliminierung ohne Zellgiftigkeit."
+        ],
+        "summaryEli5": [
+          "Eine kluge KI hat ein neues Heilmittel gegen gefährliche Superbakterien gefunden!"
+        ],
+        "summaryDeepDive": "Abyssicin-X wurde durch KI-gestützte Molekulardiffusion entwickelt und bietet einen völlig neuen Ansatz gegen Antibiotikaresistenzen."
+      }
+    },
+    "biasRating": "Neutral",
+    "biasScore": 95,
+    "perspectives": [
+      { "perspective": "Pharmacologists", "sentiment": "Game-changing computational pipeline for drug discovery." },
+      { "perspective": "FDA Regulators", "sentiment": "Accelerated Phase I human clinical trials greenlit." },
+      { "perspective": "Bioethics Watchdogs", "sentiment": "Stresses rigorous safety guidelines for AI-generated molecules." }
+    ],
+    "smartGlossary": [
+      {
+        "term": "superbugs",
+        "definition": "Strains of bacteria, viruses, or fungi resistant to most antibiotics commonly used today."
+      },
+      {
+        "term": "synthetic peptide",
+        "definition": "A short chain of amino acids synthesized artificially to perform targeted biological functions."
+      },
+      {
+        "term": "cytotoxicity",
+        "definition": "The degree to which a substance exerts toxic effects on living human cells."
+      }
+    ],
+    "voiceAudioText": "AI Medical Agent Discovers Broad-Spectrum Synthetic Antibiotic Abyssicin-X. Autonomous generative AI screened 42 million candidates to discover a cure for multidrug-resistant superbugs."
+  },
+  {
+    "id": "story-004",
+    "title": "Global Accord Signed for Autonomous Asteroid Mining & Space Property Rights",
+    "category": "Policy & Space",
+    "readTime": "2 min read",
+    "publishedAt": "4 hours ago",
+    "source": "Reuters Space Brief",
+    "originalUrl": "https://reuters.com/world/space-asteroid-mining-accord-2026",
+    "summary60w": [
+      "48 sovereign nations ratified the Geneva Space Commerce Accord governing extra-terrestrial resource extraction.",
+      "Framework establishes 200-kilometer orbital safety zones around designated mining targets.",
+      "A mandatory 12% global wealth fund royalty is levied on all harvested rare-earth metals and platinum.",
+      "First robotic prospector swarm is scheduled to launch toward near-Earth asteroid Psyche-16 next autumn."
+    ],
+    "summaryEli5": [
+      "World leaders agreed on rules for mining gold and platinum from giant space rocks!",
+      "Robotic spacecraft will fly to space to harvest precious materials and share part of the profits with Earth."
+    ],
+    "summaryDeepDive": "The United Nations Office for Outer Space Affairs (UNOOSA) hosted the historic treaty signing in Geneva. The treaty resolves decades of ambiguity surrounding Article II of the 1967 Outer Space Treaty by distinguishing raw land sovereignty from extracted material property ownership. Autonomous mining platforms will be required to register real-time telemetry feed algorithms. Royalties collected from asteroid extraction will fund environmental remediation projects on Earth.",
+    "translations": {
+      "hi": {
+        "title": "स्वायत्त क्षुद्रग्रह खनन और अंतरिक्ष संपत्ति अधिकारों के लिए वैश्विक समझौते पर हस्ताक्षर",
+        "summary60w": [
+          "48 देशों ने अंतरिक्ष संसाधन निष्कर्षण को नियंत्रित करने वाले जिनेवा समझौते पर हस्ताक्षर किए।",
+          "यह ढांचा निर्दिष्ट खनन लक्ष्यों के आसपास 200 किमी का सुरक्षा क्षेत्र स्थापित करता है।",
+          "दुर्लभ पृथ्वी धातुओं पर 12% वैश्विक संपत्ति कोष रॉयल्टी लगाई जाएगी।",
+          "पहला रोबोटिक यान अगले साल अंतरिक्ष चट्टान Psyche-16 के लिए रवाना होगा।"
+        ],
+        "summaryEli5": [
+          "दुनिया के देशों ने अंतरिक्ष की चट्टानों से सोना और प्लैटिनम निकालने के नियम बनाए हैं!"
+        ],
+        "summaryDeepDive": "संयुक्त राष्ट्र में 48 देशों ने जिनेवा अंतरिक्ष वाणिज्य समझौते पर हस्ताक्षर किए।"
+      },
+      "es": {
+        "title": "Acuerdo Global Firmado para la Minería Autónoma de Asteroides y Derechos Espaciales",
+        "summary60w": [
+          "48 naciones ratificaron el Acuerdo Espacial de Ginebra sobre extracción de recursos.",
+          "Establece zonas de seguridad orbital de 200 km alrededor de asteroides seleccionados.",
+          "Se aplicará una regalía del 12% para un fondo global en metales preciosos extraídos.",
+          "El primer enjambre robótico despegará hacia el asteroide Psyche-16 el próximo otoño."
+        ],
+        "summaryEli5": [
+          "¡Los países acordaron reglas para enviar robots al espacio y extraer oro y platino de los asteroides!"
+        ],
+        "summaryDeepDive": "El tratado de la ONU regula la extracción comercial de asteroides y destina un porcentaje a fondos de conservación ecológica terrestre."
+      },
+      "ja": {
+        "title": "自律型小惑星採掘と宇宙所有権に関する国際協定が妥結",
+        "summary60w": [
+          "48カ国が地球外資源採掘を規制するジュネーブ宇宙商業協定を批准しました。",
+          "指定された採掘ターゲットの周囲に200kmの軌道安全ゾーンを設けます。",
+          "採掘されたレアアースやプラチナには12%の国際還元ファンド税が課されます。",
+          "最初のロボット探査機群は来秋、近地球小惑星プシケ16に向けて打ち上げ予定です。"
+        ],
+        "summaryEli5": [
+          "宇宙の大きな岩（小惑星）から金やプラチナを掘り出すための世界ルールが完成しました！"
+        ],
+        "summaryDeepDive": "国連宇宙空間課のもと、宇宙資源の商業利用と地球環境保全ファンドへの還元枠組みが正式に発効しました。"
+      },
+      "de": {
+        "title": "Globales Abkommen über autonomen Asteroidenabbau und Weltraumrechte unterzeichnet",
+        "summary60w": [
+          "48 Nationen ratifizierten das Genfer Weltraumhandelsabkommen für extraterrestrischen Abbau.",
+          "Das Abkommen schafft 200 km Sicherheitszonen um ausgewählte Abbauobjekte.",
+          "Eine 12%ige Abgabe auf geförderte seltene Erden fließt in einen globalen Wohlfahrtsfonds.",
+          "Die erste Roboter-Schwarmflotte startet nächsten Herbst zum Asteroiden Psyche-16."
+        ],
+        "summaryEli5": [
+          "Die Länder der Welt haben Regeln vereinbart, um Gold und Platin von Weltraumfelsen abzubauen!"
+        ],
+        "summaryDeepDive": "Das UNO-Abkommen klärt Eigentumsrechte an Weltraumressourcen und verpflichtet Abbauunternehmen zu Umweltabgaben."
+      }
+    },
+    "biasRating": "Critical",
+    "biasScore": 76,
+    "perspectives": [
+      { "perspective": "Developing Nations", "sentiment": "Demands equitable distribution of space royalty revenues." },
+      { "perspective": "Commercial Aerospace Companies", "sentiment": "Welcomes regulatory certainty for multi-billion capital investments." },
+      { "perspective": "Astronomical Associations", "sentiment": "Raises concerns about optical satellite reflection interference." }
+    ],
+    "smartGlossary": [
+      {
+        "term": "Psyche-16",
+        "definition": "A heavy metal-rich asteroid situated between Mars and Jupiter estimated to contain quadrillions in iron and nickel."
+      },
+      {
+        "term": "orbital safety zone",
+        "definition": "A designated exclusion airspace preventing collision or unauthorized interference during active operations."
+      },
+      {
+        "term": "rare-earth metals",
+        "definition": "A set of seventeen metallic elements essential for high-tech electronics, magnets, and green tech."
+      }
+    ],
+    "voiceAudioText": "Global Accord Signed for Autonomous Asteroid Mining and Space Property Rights. 48 nations have ratified historic guidelines for extra-terrestrial resource harvesting."
+  },
+  {
+    "id": "story-005",
+    "title": "Neuromorphic Chip 'Synapse-V' Replicates Mammalian Brain Efficiency at 5W",
+    "category": "Hardware & AI",
+    "readTime": "1 min read",
+    "publishedAt": "5 hours ago",
+    "source": "IEEE Spectrum",
+    "originalUrl": "https://spectrum.ieee.org/neuromorphic-synapse-v-chip-5w",
+    "summary60w": [
+      "TSMC and Stanford unveiled a 3D stacked memristive chip mimicking 10 billion biological synapses.",
+      "Operating on a microscopic 5-Watt power envelope, it executes 100 trillion spiking neural operations per second.",
+      "The chip eliminates the von Neumann memory bottleneck by performing compute inside analog memory cells.",
+      "Enables complex real-time LLM inference directly on small battery-powered mobile devices and drones."
+    ],
+    "summaryEli5": [
+      "Engineers made a computer chip that acts just like a human brain!",
+      "It uses as little power as a nightlight bulb, but can run super smart AI right on your phone without burning the battery."
+    ],
+    "summaryDeepDive": "The Synapse-V neuromorphic processor leverages phase-change memory (PCM) crossbar arrays to process event-driven spiking signals. Traditional computer architectures spend up to 80% of energy shuttling data between the CPU and RAM across buses. By embedding multi-level resistive RAM directly within spiking neurons, Synapse-V achieves 20 tera-operations per watt. Benchmark tests ran a 70-billion parameter transformer model locally on a smartwatch battery for 18 consecutive hours.",
+    "translations": {
+      "hi": {
+        "title": "न्यूरोमॉर्फिक चिप 'Synapse-V' ने 5W बिजली में मानव मस्तिष्क जैसी दक्षता हासिल की",
+        "summary60w": [
+          "TSMC और स्टैनफोर्ड ने 10 अरब जैविक सिनैप्स की नकल करने वाली 3D चिप का अनावरण किया।",
+          "केवल 5-वाट बिजली में, यह प्रति सेकंड 100 खरब न्यूरल ऑपरेशन करती है।",
+          "यह चिप सीधे एनालॉग मेमोरी कोशिकाओं के अंदर गणना करके बिजली बचाती है।",
+          "यह छोटे मोबाइल उपकरणों और ड्रोन पर सीधे AI मॉडल चलाने में सक्षम बनाती है।"
+        ],
+        "summaryEli5": [
+          "इंजीनियरों ने एक ऐसी चिप बनाई जो दिमाग की तरह सोचती है और बहुत कम बिजली खर्च करती है!"
+        ],
+        "summaryDeepDive": "Synapse-V न्यूरोमॉर्फिक प्रोसेसर केवल 5 वाट बिजली पर 70 अरब मापदंडों वाला AI मॉडल चला सकता है।"
+      },
+      "es": {
+        "title": "El Chip Neuromórfico 'Synapse-V' Replica la Eficiencia del Cerebro Humano a 5W",
+        "summary60w": [
+          "TSMC y Stanford presentaron un chip memristivo 3D que imita 10.000 millones de sinapsis.",
+          "Funcionando a solo 5 vatios, ejecuta 100 billones de operaciones neuronales por segundo.",
+          "Elimina el cuello de botella de memoria al calcular dentro de celdas analógicas.",
+          "Permite ejecutar modelos de IA avanzados en teléfonos inteligentes y drones sin consumir batería."
+        ],
+        "summaryEli5": [
+          "¡Crearon un chip que funciona como un cerebro y gasta la misma energía que una pequeña bombilla!"
+        ],
+        "summaryDeepDive": "Synapse-V utiliza memoria analógica para ejecutar modelos de inteligencia artificial en dispositivos portátiles con bajísimo consumo energético."
+      },
+      "ja": {
+        "title": "ニューロモーフィックチップ「Synapse-V」が5Wの超低電力で哺乳類脳の効率を再現",
+        "summary60w": [
+          "TSMCとスタンフォードが100億個の生体シナプスを模倣する3D積層メモリチップを発表しました。",
+          "わずか5ワットの電力で、毎秒100兆回のスパイクニューラル演算を実行します。",
+          "アナログメモリ内で直接計算を行うことで従来のフォン・ノイマンボトルネックを解消しました。",
+          "バッテリー駆動のスマホやドローン上で大規模型LLMを直接ローカル実行可能です。"
+        ],
+        "summaryEli5": [
+          "人間の脳のように考えて、豆電球くらいの少ない電気で動くすごいチップができました！"
+        ],
+        "summaryDeepDive": "Synapse-Vはメモリと演算部を一体化させたニューロモーフィック構造により、従来の80%の電力損失をカットしました。"
+      },
+      "de": {
+        "title": "Neuromorpher Chip 'Synapse-V' repliziert menschliche Gehirneffizienz bei nur 5W",
+        "summary60w": [
+          "TSMC und Stanford stellten einen 3D-Memristor-Chip vor, der 10 Milliarden Synapsen nachbildet.",
+          "Bei einem Mikroverbrauch von 5 Watt führt er 100 Billionen neuronale Operationen pro Sekunde aus.",
+          "Er umgeht den Von-Neumann-Flaschenhals durch Berechnungen in analogen Speicherzellen.",
+          "Ermöglicht komplexe KI-Modelle direkt auf kleinen mobilen Geräten und Drohnen."
+        ],
+        "summaryEli5": [
+          "Ingenieure haben einen Chip gebaut, der wie ein echtes Gehirn arbeitet und kaum Strom braucht!"
+        ],
+        "summaryDeepDive": "Der Synapse-V-Prozessor integriert ReRAM-Speicherzellen direkt in neuronale Knotenpunkte für maximale Energieeffizienz."
+      }
+    },
+    "biasRating": "Neutral",
+    "biasScore": 91,
+    "perspectives": [
+      { "perspective": "Computer Architects", "sentiment": "Hailed as the most significant hardware paradigm shift since the transistor." },
+      { "perspective": "Mobile Developers", "sentiment": "Eagerly anticipating on-device zero-latency generative AI execution." },
+      { "perspective": "Semiconductor Supply Chain", "sentiment": "Notes high initial manufacturing complexity for 3D wafer stacking." }
+    ],
+    "smartGlossary": [
+      {
+        "term": "neuromorphic",
+        "definition": "Computer architecture designed to physically emulate the biological neural structure of the human brain."
+      },
+      {
+        "term": "memristor",
+        "definition": "A electrical component that regulates current flow and remembers the amount of charge that previously passed through it."
+      },
+      {
+        "term": "von Neumann bottleneck",
+        "definition": "The performance limit caused by data bus bandwidth delays between the central processor and separate RAM memory."
+      }
+    ],
+    "voiceAudioText": "Neuromorphic Chip Synapse-V Replicates Mammalian Brain Efficiency at 5 Watts. TSMC and Stanford unveil a 3D chip executing 100 trillion operations per second on mobile power."
+  }
+]

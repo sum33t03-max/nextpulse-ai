@@ -1,0 +1,12 @@
+node_modules/
+.venv/
+venv/
+.next/
+dist/
+__pycache__/
+*.pyc
+.env
+.env.local
+*.db
+nextpulse.db
+.DS_Store
