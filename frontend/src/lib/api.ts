@@ -4,6 +4,14 @@ import { MOCK_STORIES } from './mockData';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  },
+});
+
 const FILLER_PATTERNS = [
   /\blatest news\b/gi,
   /\blatest\b/gi,
@@ -64,7 +72,7 @@ export const api = {
       if (scope) params.scope = scope;
       if (location) params.location = location;
 
-      const response = await axios.get(`${API_BASE_URL}/recommendations`, { params });
+      const response = await apiClient.get('/recommendations', { params });
       return response.data;
     } catch (error) {
       console.warn('Backend recommendation API failed, falling back to client stories:', error);
@@ -83,7 +91,7 @@ export const api = {
     const cleaned = cleanSearchQuery(query);
     if (!cleaned || cleaned.length < 2) return [];
     try {
-      const response = await axios.get(`${API_BASE_URL}/news/suggest`, {
+      const response = await apiClient.get('/news/suggest', {
         params: { q: cleaned }
       });
       return response.data || [];
@@ -141,7 +149,7 @@ export const api = {
     }
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/news/search`, {
+      const response = await apiClient.post('/news/search', {
         query: cleaned || query,
         category: category !== 'All' ? category : undefined,
         scope,
@@ -156,7 +164,7 @@ export const api = {
 
   async getStoryById(id: string): Promise<Story> {
     try {
-      const response = await axios.get(`${API_BASE_URL}/stories/${id}`);
+      const response = await apiClient.get(`/stories/${id}`);
       return response.data;
     } catch (error) {
       const found = MOCK_STORIES.find(s => s.id === id);
@@ -167,7 +175,7 @@ export const api = {
 
   async toggleBookmark(id: string): Promise<{ story_id: string; isBookmarked: boolean }> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/stories/${id}/bookmark`);
+      const response = await apiClient.post(`/stories/${id}/bookmark`);
       return response.data;
     } catch (error) {
       const story = MOCK_STORIES.find(s => s.id === id);
@@ -181,7 +189,7 @@ export const api = {
 
   async deleteStory(id: string): Promise<{ success: boolean }> {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/stories/${id}`);
+      const response = await apiClient.delete(`/stories/${id}`);
       return response.data;
     } catch (error) {
       const index = MOCK_STORIES.findIndex(s => s.id === id);
@@ -232,7 +240,7 @@ export const api = {
     }
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/ingest`, payload);
+      const response = await apiClient.post('/ingest', payload);
       return response.data;
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -288,7 +296,7 @@ export const api = {
     }
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/ingest/document`, formData, {
+      const response = await apiClient.post('/ingest/document', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       return response.data;
@@ -306,7 +314,7 @@ export const api = {
 
   async getChatHistory(articleId: string): Promise<{ id: number; sender: 'user' | 'assistant'; message: string; created_at: string }[]> {
     try {
-      const response = await axios.get(`${API_BASE_URL}/chat/${articleId}`);
+      const response = await apiClient.get(`/chat/${articleId}`);
       return response.data;
     } catch (error) {
       console.warn(`Failed to fetch chat history for ${articleId}:`, error);
@@ -337,7 +345,7 @@ export const api = {
     }
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/chat/article`, payload);
+      const response = await apiClient.post('/chat/article', payload);
       return response.data;
     } catch (error) {
       console.warn('Backend chat failed, falling back to local Co-Pilot response:', error);

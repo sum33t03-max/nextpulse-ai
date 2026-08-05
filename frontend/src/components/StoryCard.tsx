@@ -8,6 +8,7 @@ import { VoiceAnchor } from './VoiceAnchor';
 import { BiasMeter } from './BiasMeter';
 import { Bookmark, ExternalLink, Clock, Share2, Layers, BookOpen, Bot, Trash2, Globe } from 'lucide-react';
 import { api } from '../lib/api';
+import { safeFormatDate } from '../lib/utils';
 
 interface StoryCardProps {
   story: Story;
@@ -27,17 +28,37 @@ export const StoryCard: React.FC<StoryCardProps> = ({
   onDeleteStory,
 }) => {
   const [tone, setTone] = useState<CardTone>('brief');
-  const [isBookmarked, setIsBookmarked] = useState(story.isBookmarked);
+  const [isBookmarked, setIsBookmarked] = useState(story?.isBookmarked || false);
   const [copied, setCopied] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  if (!story) return null;
+
+  // Defensive field fallbacks
+  const category = story.category || "General News";
+  const source = story.source || "Verified Source";
+  const readTime = story.readTime || "1 min read";
+  const publishedAt = safeFormatDate(story.publishedAt);
+  const biasRating = story.biasRating || "Neutral";
+  const biasScore = typeof story.biasScore === 'number' ? story.biasScore : 90;
 
   // Derive translated content if selected language is non-English
   const translated = story.translations && story.translations[currentLanguage];
 
-  const title = translated?.title || story.title;
-  const summary60w = translated?.summary60w || story.summary60w;
-  const summaryEli5 = translated?.summaryEli5 || story.summaryEli5;
-  const summaryDeepDive = translated?.summaryDeepDive || story.summaryDeepDive;
+  const title = translated?.title || story.title || "Untitled News Story";
+  const summary60w = (translated?.summary60w && translated.summary60w.length > 0)
+    ? translated.summary60w
+    : (story.summary60w && story.summary60w.length > 0)
+    ? story.summary60w
+    : ["Executive summary details currently being processed for this story."];
+
+  const summaryEli5 = (translated?.summaryEli5 && translated.summaryEli5.length > 0)
+    ? translated.summaryEli5
+    : (story.summaryEli5 && story.summaryEli5.length > 0)
+    ? story.summaryEli5
+    : ["Here are the key points explained simply!"];
+
+  const summaryDeepDive = translated?.summaryDeepDive || story.summaryDeepDive || "Comprehensive deep dive synthesis currently active.";
 
   // Prepare text string for Voice Anchor
   const voiceText = translated
@@ -87,19 +108,25 @@ export const StoryCard: React.FC<StoryCardProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-neutral-800/60 pb-3">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-full bg-neutral-800 border border-neutral-700 text-neutral-200 font-mono text-[11px] font-medium shrink-0">
-              {story.category}
+              {category}
             </span>
 
             {/* Publisher Source Badge with safe truncation */}
             <span className="px-2.5 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 font-mono text-[11px] font-medium shrink-0 flex items-center gap-1">
               <Globe className="w-3 h-3 text-cyan-400 shrink-0" />
-              <span className="truncate max-w-[100px] sm:max-w-[140px]">{story.source}</span>
+              <span className="truncate max-w-[100px] sm:max-w-[140px]">{source}</span>
             </span>
 
             <div className="flex items-center gap-1 text-neutral-400 font-mono text-[11px] shrink-0">
               <Clock className="w-3 h-3 text-neutral-500" />
-              <span>{story.readTime}</span>
+              <span>{readTime}</span>
             </div>
+
+            {publishedAt && (
+              <span className="text-[10px] text-neutral-500 font-mono shrink-0">
+                • {publishedAt}
+              </span>
+            )}
           </div>
 
           <div className="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
@@ -233,7 +260,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors text-xs font-mono font-medium shrink-0"
-              title={`Verify original story on ${story.source}`}
+              title={`Verify original story on ${source}`}
             >
               <span>Verify Source</span>
               <ExternalLink className="w-3 h-3 text-cyan-400" />
@@ -243,7 +270,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
 
         {/* Right Actions: Bias Rating & Share */}
         <div className="flex items-center gap-2 shrink-0">
-          <BiasMeter rating={story.biasRating} score={story.biasScore} />
+          <BiasMeter rating={biasRating} score={biasScore} />
 
           <button
             onClick={handleShareClick}
