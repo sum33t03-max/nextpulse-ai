@@ -23,15 +23,15 @@ export const LanguageSelect: React.FC<LanguageSelectProps> = ({
 }) => {
   return (
     <div className="relative inline-flex items-center">
-      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-obsidian-700/80 border border-cyber-cyan/30 text-xs text-cyber-cyan shadow-neon-cyan/20">
-        <Globe className="w-3.5 h-3.5 text-cyber-cyan animate-pulse" />
+      <div className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-xs text-cyan-400">
+        <Globe className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
         <select
           value={currentLanguage}
           onChange={(e) => onLanguageChange(e.target.value as LanguageCode)}
-          className="bg-transparent text-gray-200 focus:outline-none cursor-pointer font-mono text-xs pr-1"
+          className="bg-transparent text-neutral-200 focus:outline-none cursor-pointer font-mono text-xs pr-0 sm:pr-1"
         >
           {LANGUAGES.map((lang) => (
-            <option key={lang.code} value={lang.code} className="bg-obsidian-800 text-gray-100">
+            <option key={lang.code} value={lang.code} className="bg-neutral-900 text-white">
               {lang.flag} {lang.label}
             </option>
           ))}
