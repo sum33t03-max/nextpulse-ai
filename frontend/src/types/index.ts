@@ -25,8 +25,12 @@ export interface Story {
   category: string;
   readTime: string;
   publishedAt: string;
-  source: string;
+  source: any;
   originalUrl?: string;
+  imageUrl?: string;
+  urlToImage?: string;
+  description?: string;
+  tags?: string[];
   summary60w: string[];
   summaryEli5: string[];
   summaryDeepDive: string;

@@ -6,12 +6,12 @@ import { Story, CardTone, LanguageCode } from '../types';
 import { ToneToggle } from './ToneToggle';
 import { VoiceAnchor } from './VoiceAnchor';
 import { BiasMeter } from './BiasMeter';
-import { Bookmark, ExternalLink, Clock, Share2, Layers, BookOpen, Bot, Trash2, Globe } from 'lucide-react';
+import { Bookmark, ExternalLink, Clock, Share2, Layers, BookOpen, Bot, Trash2, Globe, Tag } from 'lucide-react';
 import { api } from '../lib/api';
 import { safeFormatDate } from '../lib/utils';
 
 interface StoryCardProps {
-  story: Story;
+  story?: Story;
   currentLanguage: LanguageCode;
   index?: number;
   onBookmarkToggle?: (storyId: string, isBookmarked: boolean) => void;
@@ -32,49 +32,62 @@ export const StoryCard: React.FC<StoryCardProps> = ({
   const [copied, setCopied] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  if (!story) return null;
+  // Image fallback error state
+  const initialImg = story?.imageUrl || story?.urlToImage || null;
+  const [imgSrc, setImgSrc] = useState<string | null>(initialImg);
+  const [hasImgError, setHasImgError] = useState<boolean>(false);
+
+  // Strict defensive guard for story object
+  if (!story || typeof story !== 'object') return null;
 
   // Defensive field fallbacks
-  const category = story.category || "General News";
-  const source = story.source || "Verified Source";
-  const readTime = story.readTime || "1 min read";
-  const publishedAt = safeFormatDate(story.publishedAt);
-  const biasRating = story.biasRating || "Neutral";
-  const biasScore = typeof story.biasScore === 'number' ? story.biasScore : 90;
+  const category = story?.category || "General News";
+  
+  // Safe source name extraction for both string and object sources (e.g. { name: "Reuters" })
+  const sourceName = (typeof story?.source === 'object' ? story?.source?.name : story?.source) || "News Source";
+  
+  const readTime = story?.readTime || "1 min read";
+  const publishedAt = safeFormatDate(story?.publishedAt);
+  const biasRating = story?.biasRating || "Neutral";
+  const biasScore = typeof story?.biasScore === 'number' ? story.biasScore : 90;
+  const tags = Array.isArray(story?.tags) ? story.tags : [];
 
   // Derive translated content if selected language is non-English
-  const translated = story.translations && story.translations[currentLanguage];
+  const translated = story?.translations && story.translations[currentLanguage];
 
-  const title = translated?.title || story.title || "Untitled News Story";
+  const title = translated?.title || story?.title || "Untitled Article";
+
   const summary60w = (translated?.summary60w && translated.summary60w.length > 0)
     ? translated.summary60w
-    : (story.summary60w && story.summary60w.length > 0)
+    : (story?.summary60w && story.summary60w.length > 0)
     ? story.summary60w
+    : story?.description
+    ? [story.description]
     : ["Executive summary details currently being processed for this story."];
 
   const summaryEli5 = (translated?.summaryEli5 && translated.summaryEli5.length > 0)
     ? translated.summaryEli5
-    : (story.summaryEli5 && story.summaryEli5.length > 0)
+    : (story?.summaryEli5 && story.summaryEli5.length > 0)
     ? story.summaryEli5
     : ["Here are the key points explained simply!"];
 
-  const summaryDeepDive = translated?.summaryDeepDive || story.summaryDeepDive || "Comprehensive deep dive synthesis currently active.";
+  const summaryDeepDive = translated?.summaryDeepDive || story?.summaryDeepDive || story?.description || "Comprehensive deep dive synthesis currently active.";
 
   // Prepare text string for Voice Anchor
   const voiceText = translated
     ? `${title}. ${summary60w.join(' ')}`
-    : story.voiceAudioText || `${title}. ${summary60w.join(' ')}`;
+    : story?.voiceAudioText || `${title}. ${summary60w.join(' ')}`;
 
   const handleBookmarkClick = async () => {
     const nextState = !isBookmarked;
     setIsBookmarked(nextState);
-    if (onBookmarkToggle) onBookmarkToggle(story.id, nextState);
-    await api.toggleBookmark(story.id);
+    if (onBookmarkToggle && story?.id) onBookmarkToggle(story.id, nextState);
+    if (story?.id) await api.toggleBookmark(story.id);
   };
 
   const handleShareClick = () => {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(story.originalUrl || window.location.href);
+      navigator.clipboard.writeText(story?.originalUrl || window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -82,10 +95,10 @@ export const StoryCard: React.FC<StoryCardProps> = ({
 
   const handleDeleteClick = async () => {
     setIsDeleting(true);
-    if (onDeleteStory) {
+    if (onDeleteStory && story?.id) {
       onDeleteStory(story.id);
     }
-    await api.deleteStory(story.id);
+    if (story?.id) await api.deleteStory(story.id);
   };
 
   // Alternating side entrance: Even cards slide from LEFT (-100px), Odd cards slide from RIGHT (+100px)
@@ -114,7 +127,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
             {/* Publisher Source Badge with safe truncation */}
             <span className="px-2.5 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 font-mono text-[11px] font-medium shrink-0 flex items-center gap-1">
               <Globe className="w-3 h-3 text-cyan-400 shrink-0" />
-              <span className="truncate max-w-[100px] sm:max-w-[140px]">{source}</span>
+              <span className="truncate max-w-[100px] sm:max-w-[140px]">{sourceName}</span>
             </span>
 
             <div className="flex items-center gap-1 text-neutral-400 font-mono text-[11px] shrink-0">
@@ -158,6 +171,18 @@ export const StoryCard: React.FC<StoryCardProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Optional Article Image with onError Fallback */}
+        {imgSrc && !hasImgError && (
+          <div className="relative w-full h-44 rounded-lg overflow-hidden mb-3 bg-neutral-900 border border-neutral-800">
+            <img
+              src={imgSrc}
+              alt={title}
+              onError={() => setHasImgError(true)}
+              className="w-full h-full object-cover transition-opacity duration-300"
+            />
+          </div>
+        )}
 
         {/* Story Headline */}
         <h2 className="font-sans text-base md:text-lg font-bold text-white leading-snug tracking-tight hover:text-neutral-200 transition-colors">
@@ -209,8 +234,20 @@ export const StoryCard: React.FC<StoryCardProps> = ({
 
         </div>
 
+        {/* Optional Tags Badges */}
+        {tags.length > 0 && (
+          <div className="flex items-center gap-1.5 flex-wrap pt-1">
+            {tags.map((tag, tIdx) => (
+              <span key={tIdx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-neutral-900 border border-neutral-800 text-[10px] font-mono text-neutral-400">
+                <Tag className="w-2.5 h-2.5 text-cyan-400" />
+                <span>{tag}</span>
+              </span>
+            ))}
+          </div>
+        )}
+
         {/* Smart Glossary (Positioned BELOW Content Cards) */}
-        {story.smartGlossary && story.smartGlossary.length > 0 && (
+        {story?.smartGlossary && story.smartGlossary.length > 0 && (
           <div className="pt-2 border-t border-neutral-800/60">
             <div className="flex items-center gap-1 text-[11px] font-mono text-neutral-500 mb-1.5">
               <span>SMART GLOSSARY:</span>
@@ -254,13 +291,13 @@ export const StoryCard: React.FC<StoryCardProps> = ({
           )}
 
           {/* Read Full Source / Verify Source Action Button */}
-          {story.originalUrl && (
+          {story?.originalUrl && (
             <a
               href={story.originalUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors text-xs font-mono font-medium shrink-0"
-              title={`Verify original story on ${source}`}
+              title={`Verify original story on ${sourceName}`}
             >
               <span>Verify Source</span>
               <ExternalLink className="w-3 h-3 text-cyan-400" />
