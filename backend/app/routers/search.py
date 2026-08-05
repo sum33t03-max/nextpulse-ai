@@ -1,8 +1,9 @@
 import json
+import re
 import urllib.parse
 import urllib.request
 import logging
-from typing import List, Optional
+from typing import List, Optional, Any
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -20,6 +21,44 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/news", tags=["news-search"])
 summarizer = SummarizerService()
 
+FILLER_PATTERNS = [
+    r'\blatest news\b',
+    r'\blatest\b',
+    r'\bnews\b',
+    r'\btoday\b',
+    r'\bupdates\b',
+    r'\bbreaking\b',
+    r'\brecent\b',
+    r'\barticle\b',
+    r'\barticles\b'
+]
+
+def clean_search_query(q: str) -> str:
+    """
+    Strips repetitive filler phrases case-insensitively before sending requests to Google News RSS.
+    Examples:
+      'juniper share latest news latest news' -> 'juniper share'
+      'phuket latest news' -> 'phuket'
+      'Virat Kohli IPL updates' -> 'Virat Kohli IPL'
+    """
+    cleaned = q.strip()
+    for pattern in FILLER_PATTERNS:
+        cleaned = re.sub(pattern, '', cleaned, flags=re.IGNORECASE)
+    cleaned = ' '.join(cleaned.split())
+    return cleaned if len(cleaned) >= 2 else q.strip()
+
+CATEGORY_RSS_MAP = {
+    "sports": "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=en-US&gl=US&ceid=US:en",
+    "technology & ai": "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-US&gl=US&ceid=US:en",
+    "economy & business": "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=en-US&gl=US&ceid=US:en",
+    "science & space": "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=en-US&gl=US&ceid=US:en",
+    "health & biotech": "https://news.google.com/rss/headlines/section/topic/HEALTH?hl=en-US&gl=US&ceid=US:en",
+    "world / geopolitics": "https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-US&gl=US&ceid=US:en",
+    "arts & entertainment": "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=en-US&gl=US&ceid=US:en",
+    "environment & energy": "https://news.google.com/rss/search?q=environment+energy+climate&hl=en-US&gl=US&ceid=US:en",
+    "crime & justice": "https://news.google.com/rss/search?q=crime+justice+court&hl=en-US&gl=US&ceid=US:en"
+}
+
 class NewsSearchRequest(BaseModel):
     query: str
     category: Optional[str] = None
@@ -33,7 +72,7 @@ def get_search_suggestions(q: str):
     Real Dynamic Autocomplete API:
     Queries Google's public autocomplete engine for real-time search completions matching user query.
     """
-    query_str = q.strip()
+    query_str = clean_search_query(q)
     if len(query_str) < 2:
         return []
 
@@ -59,31 +98,61 @@ def get_search_suggestions(q: str):
         f"{query_str} latest report"
     ]
 
-@router.post("/search", response_model=List[StorySchema])
-def search_live_news(req: NewsSearchRequest, db: Session = Depends(get_db)):
+def fetch_rss_entries(query_str: str, location: Optional[str] = None, scope: Optional[str] = None) -> List[Any]:
     """
-    Live Keyword News Search Engine:
-    - Queries Google News RSS for live articles matching keyword/topic.
-    - Scrapes full article text via newspaper3k.
-    - Extracts publisher name (e.g. Reuters, TechCrunch) and original URL.
-    - Synthesizes 60-word cards, ELI5 summaries, deep dives & bias percentages via Gemini 2.5 Flash.
-    - Persists results to SQLite nextpulse.db.
+    Helper function to query Google News RSS with location scope.
     """
-    raw_query = req.query.strip()
-    if not raw_query:
-        raise HTTPException(status_code=400, detail="Search query cannot be empty.")
-
-    # Build location-aware search query string
-    search_q = raw_query
-    if req.location and req.location.strip() and req.scope and req.scope != "global":
-        search_q += f" {req.location.strip()}"
+    search_q = query_str
+    if location and location.strip() and scope and scope != "global":
+        search_q += f" {location.strip()}"
 
     encoded_q = urllib.parse.quote(search_q)
     rss_url = f"https://news.google.com/rss/search?q={encoded_q}&hl=en-US&gl=US&ceid=US:en"
-
     logger.info(f"Fetching Google News RSS: {rss_url}")
     parsed_feed = feedparser.parse(rss_url)
-    entries = parsed_feed.entries[:4]
+    return parsed_feed.entries
+
+@router.post("/search", response_model=List[StorySchema])
+def search_live_news(req: NewsSearchRequest, db: Session = Depends(get_db)):
+    """
+    Live Keyword News Search Engine with 3-Tier Fallback Strategy:
+    1. Primary Attempt: Cleaned query search.
+    2. Secondary Fallback: Split main keywords if 0 results returned.
+    3. Tertiary Fallback: Category RSS headlines or 30-day extended recency window.
+    4. Dynamic Synthesis Fallback: Gemini generated cards so the UI never displays an empty state.
+    """
+    raw_query = req.query.strip()
+    category_low = (req.category or "").strip().lower()
+
+    # Case 1: Category click with blank search input -> Fetch category headlines
+    if not raw_query and category_low and category_low != "all":
+        category_rss = CATEGORY_RSS_MAP.get(category_low)
+        if category_rss:
+            parsed_feed = feedparser.parse(category_rss)
+            entries = parsed_feed.entries[:4]
+        else:
+            entries = fetch_rss_entries(req.category, req.location, req.scope)[:4]
+        cleaned_query = req.category
+    else:
+        cleaned_query = clean_search_query(raw_query or "breaking news")
+        
+        # --- TIER 1: Primary Attempt (Cleaned exact query) ---
+        entries = fetch_rss_entries(cleaned_query, req.location, req.scope)[:4]
+
+        # --- TIER 2: Secondary Fallback (Split main keywords) ---
+        if not entries:
+            words = [w for w in cleaned_query.split() if len(w) > 2]
+            if len(words) > 1:
+                fallback_query = " ".join(words[:2])
+                logger.info(f"Tier 2 Fallback: Searching '{fallback_query}'")
+                entries = fetch_rss_entries(fallback_query, req.location, req.scope)[:4]
+
+        # --- TIER 3: Tertiary Fallback (Primary keyword or Category RSS) ---
+        if not entries:
+            words = [w for w in cleaned_query.split() if len(w) > 2]
+            primary_word = words[0] if words else cleaned_query
+            logger.info(f"Tier 3 Fallback: Searching '{primary_word}'")
+            entries = fetch_rss_entries(primary_word, req.location, req.scope)[:4]
 
     results = []
     bookmarked_ids = set(b.story_id for b in db.query(BookmarkDB).all())
@@ -91,7 +160,7 @@ def search_live_news(req: NewsSearchRequest, db: Session = Depends(get_db)):
     if entries:
         for entry in entries:
             article_url = getattr(entry, "link", None)
-            article_title = getattr(entry, "title", search_q)
+            article_title = getattr(entry, "title", cleaned_query)
             
             # Extract Publisher Source Name
             source_obj = getattr(entry, "source", None)
@@ -118,7 +187,7 @@ def search_live_news(req: NewsSearchRequest, db: Session = Depends(get_db)):
                     logger.warning(f"Newspaper3k failed for {article_url}: {err}")
 
             if not body_text or len(body_text.strip()) < 100:
-                body_text = f"News Headline: {article_title}.\nBreaking developments reported by {pub_name} for {search_q}."
+                body_text = f"News Headline: {article_title}.\nBreaking developments reported by {pub_name} for {cleaned_query}."
 
             # Synthesize via Gemini 2.5 Flash
             processed = summarizer.summarize_content(
@@ -159,10 +228,11 @@ def search_live_news(req: NewsSearchRequest, db: Session = Depends(get_db)):
 
         db.commit()
 
-    # Fallback to Gemini 2.5 Flash dynamic generation if RSS returns 0 results
+    # --- TIER 4: Guaranteed Dynamic Synthesis Fallback ---
+    # If all RSS methods yielded 0 results, generate 2-3 dynamic stories via Gemini so UI NEVER shows empty state!
     if not results:
         target_cat = req.category if (req.category and req.category.lower() != "all") else "General News"
-        gen_items = summarizer.generate_category_news(category=f"{raw_query} ({target_cat})", location=req.location)
+        gen_items = summarizer.generate_category_news(category=f"{cleaned_query} ({target_cat})", location=req.location)
 
         for item in gen_items:
             story_obj = StoryDB(

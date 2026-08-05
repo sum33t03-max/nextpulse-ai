@@ -4,6 +4,28 @@ import { MOCK_STORIES } from './mockData';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
+const FILLER_PATTERNS = [
+  /\blatest news\b/gi,
+  /\blatest\b/gi,
+  /\bnews\b/gi,
+  /\btoday\b/gi,
+  /\bupdates\b/gi,
+  /\bbreaking\b/gi,
+  /\brecent\b/gi,
+  /\barticle\b/gi,
+  /\barticles\b/gi
+];
+
+export function cleanSearchQuery(q: string): string {
+  if (!q) return '';
+  let cleaned = q.trim();
+  for (const pattern of FILLER_PATTERNS) {
+    cleaned = cleaned.replace(pattern, '');
+  }
+  cleaned = cleaned.replace(/\s+/g, ' ').trim();
+  return cleaned.length >= 2 ? cleaned : q.trim();
+}
+
 export const api = {
   async getStories(
     category?: string,
@@ -58,20 +80,19 @@ export const api = {
   },
 
   async getSearchSuggestions(query: string): Promise<string[]> {
-    if (!query || query.trim().length < 2) return [];
+    const cleaned = cleanSearchQuery(query);
+    if (!cleaned || cleaned.length < 2) return [];
     try {
       const response = await axios.get(`${API_BASE_URL}/news/suggest`, {
-        params: { q: query.trim() }
+        params: { q: cleaned }
       });
       return response.data || [];
     } catch (error) {
       console.warn('Failed to fetch search suggestions:', error);
       return [
-        `${query} latest news`,
-        `${query} IPL updates`,
-        `${query} breaking coverage`,
-        `${query} sports match stats`,
-        `${query} today's report`
+        `${cleaned} news`,
+        `${cleaned} updates today`,
+        `${cleaned} breaking report`
       ];
     }
   },
@@ -83,25 +104,27 @@ export const api = {
     location?: string,
     isDemoMode: boolean = false
   ): Promise<Story[]> {
+    const cleaned = cleanSearchQuery(query);
+
     if (isDemoMode) {
       const mockStory: Story = {
         id: `demo-search-${Date.now()}`,
-        title: `Live News Results: ${query}`,
+        title: `Live News Results: ${cleaned || query}`,
         category: category && category !== 'All' ? category : (query.toLowerCase().includes('virat') || query.toLowerCase().includes('ipl') ? "Sports" : "Search Intelligence"),
         readTime: "1 min read",
         publishedAt: "Just now",
         source: "NextPulse Demo Engine",
         originalUrl: undefined,
         summary60w: [
-          `[DEMO MODE] Live RSS search executed for keyword: '${query}'.`,
+          `[DEMO MODE] Live RSS search executed for keyword: '${cleaned || query}'.`,
           "Takeaway 1: Scraped top breaking headlines and body passages.",
-          "Takeaway 2: Gemini 2.5 Flash synthesized 60-word HUD card.",
+          "Takeaway 2: Gemini 2.5 Flash synthesized Smart Brief HUD card.",
           "Takeaway 3: Calculated bias rating (Neutral 90%) and key glossary terms."
         ],
         summaryEli5: [
-          `[DEMO MODE] Here are the latest news updates for '${query}' explained simply!`
+          `[DEMO MODE] Here are the latest news updates for '${cleaned || query}' explained simply!`
         ],
-        summaryDeepDive: `Live Search Breakdown for ${query}.\n\nSynthetic intelligence parsed real-time headlines across verified sources.`,
+        summaryDeepDive: `Live Search Breakdown for ${cleaned || query}.\n\nSynthetic intelligence parsed real-time headlines across verified sources.`,
         biasRating: "Neutral",
         biasScore: 90,
         perspectives: [
@@ -110,7 +133,7 @@ export const api = {
         smartGlossary: [
           { term: "live news RSS", definition: "Real-time news syndication feed indexed by search engines." }
         ],
-        voiceAudioText: `Live news search summary for ${query}.`,
+        voiceAudioText: `Live news search summary for ${cleaned || query}.`,
         isBookmarked: false
       };
       MOCK_STORIES.unshift(mockStory);
@@ -119,7 +142,7 @@ export const api = {
 
     try {
       const response = await axios.post(`${API_BASE_URL}/news/search`, {
-        query,
+        query: cleaned || query,
         category: category !== 'All' ? category : undefined,
         scope,
         location
@@ -243,10 +266,10 @@ export const api = {
           `[DEMO MODE] Scanned news document/image '${fileName}'.`,
           "Takeaway 1: Optical character recognition extracted headline and article layout.",
           "Takeaway 2: Gemini 2.5 Flash multimodal vision parsed key metrics.",
-          "Takeaway 3: Generated 60-word HUD news card with zero manual typing required."
+          "Takeaway 3: Generated Smart Brief HUD news card with zero manual typing required."
         ],
         summaryEli5: [
-          "[DEMO MODE] We scanned your news document image and converted it into an easy 60-word card!"
+          "[DEMO MODE] We scanned your news document image and converted it into an easy Smart Brief card!"
         ],
         summaryDeepDive: `Multimodal Vision OCR Synthesis for ${fileName}.\n\nText, headlines, and visual graphics were extracted and synthesized.`,
         biasRating: "Neutral",

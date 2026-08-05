@@ -8,19 +8,19 @@ import { FullScreenSplash } from '../components/FullScreenSplash';
 import { SearchBar } from '../components/SearchBar';
 import { Story, LanguageCode } from '../types';
 import { api } from '../lib/api';
-import { Search, RefreshCw, Sparkles, UploadCloud, Cpu, AlertCircle, Layers, Dices, Target } from 'lucide-react';
+import { Sparkles, RefreshCw, Cpu, Bot, Bookmark, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 
-export default function HomePage() {
+export default function Home() {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
   const [selectedScope, setSelectedScope] = useState<string>('global');
   const [locationInput, setLocationInput] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
   const [replaySplash, setReplaySplash] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Recommendation Mode State: 'history' (For You) or 'random' (Discovery)
   const [recMode, setRecMode] = useState<'history' | 'random'>('history');
@@ -49,9 +49,23 @@ export default function HomePage() {
     fetchFeed();
   }, [recMode, selectedCategory, selectedScope, locationInput, isDemoMode]);
 
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setSearchError(null);
+    if (category !== 'All') {
+      setIsSearchingLive(true);
+      api.searchLiveNews('', category, selectedScope, locationInput, isDemoMode)
+        .then((res) => {
+          if (res && res.length > 0) setStories(res);
+        })
+        .finally(() => setIsSearchingLive(false));
+    }
+  };
+
   const handleLiveNewsSearch = async (query: string) => {
     if (!query.trim()) return;
 
+    setSearchQuery(query);
     setIsSearchingLive(true);
     setSearchError(null);
 
@@ -67,10 +81,10 @@ export default function HomePage() {
       if (liveResults && liveResults.length > 0) {
         setStories(liveResults);
       } else {
-        setSearchError('No recent news found for this keyword. Try another search query.');
+        setSearchError('No recent news found for this keyword. Showing broad fallback recommendations.');
       }
     } catch (err: any) {
-      setSearchError(err?.message || 'Failed to fetch live news stream. Try another keyword.');
+      setSearchError(err?.message || 'Failed to fetch live news stream. Showing fallback stream.');
     } finally {
       setIsSearchingLive(false);
     }
@@ -91,16 +105,6 @@ export default function HomePage() {
     setIsCoPilotOpen(true);
   };
 
-  const filteredStories = stories.filter((s) => {
-    if (!searchQuery.trim()) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      s.title.toLowerCase().includes(q) ||
-      s.category.toLowerCase().includes(q) ||
-      s.summary60w.some((bullet) => bullet.toLowerCase().includes(q))
-    );
-  });
-
   const bookmarkedCount = stories.filter((s) => s.isBookmarked).length;
 
   return (
@@ -116,7 +120,7 @@ export default function HomePage() {
         currentLanguage={currentLanguage}
         onLanguageChange={setCurrentLanguage}
         selectedCategory={selectedCategory}
-        onCategorySelect={setSelectedCategory}
+        onCategorySelect={handleCategorySelect}
         bookmarkCount={bookmarkedCount}
         isDemoMode={isDemoMode}
         onDemoModeToggle={setIsDemoMode}
@@ -146,73 +150,67 @@ export default function HomePage() {
 
           {/* Prominent Live News Search Engine Bar with Autocomplete Dropdown */}
           <SearchBar onSearchSubmit={handleLiveNewsSearch} isSearching={isSearchingLive} />
-
-          {/* Search Loading Shimmer Indicator */}
-          {isSearchingLive && (
-            <div className="p-3 rounded-lg bg-cyan-950/30 border border-cyan-500/30 text-cyan-300 font-mono text-xs text-left flex items-center gap-2.5 animate-pulse mt-3">
-              <Cpu className="w-4 h-4 text-cyan-400 animate-spin shrink-0" />
-              <span>Fetching live RSS feeds & generating AI 60-word summaries...</span>
-            </div>
-          )}
-
-          {searchError && (
-            <div className="p-3 rounded-lg bg-red-950/40 border border-red-500/30 text-red-300 font-mono text-xs text-left flex items-start gap-2 mt-3">
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-              <span>{searchError}</span>
-            </div>
-          )}
         </div>
 
-        {/* Feed Header with Dual-Mode Recommendation Switch */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-neutral-900">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
-            {/* Segmented Switch for Recommendation Modes */}
-            <div className="flex items-center gap-1 p-1 rounded-xl bg-neutral-900 border border-neutral-800 text-xs font-mono">
+        {/* Live News Searching Indicator */}
+        {isSearchingLive && (
+          <div className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 flex items-center justify-between font-mono text-xs max-w-2xl mx-auto w-full animate-pulse">
+            <div className="flex items-center gap-3">
+              <Cpu className="w-4 h-4 text-cyan-400 animate-spin" />
+              <div>
+                <p className="text-white font-medium">Querying Google News RSS & Gemini 2.5 Flash...</p>
+                <p className="text-neutral-500 text-[11px]">Fetching live articles & synthesizing adaptive HUD cards...</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Search Error Notice Banner */}
+        {searchError && (
+          <div className="p-3 rounded-lg bg-amber-950/40 border border-amber-500/30 text-amber-300 font-mono text-xs max-w-2xl mx-auto w-full flex items-center justify-between">
+            <span>{searchError}</span>
+            <button onClick={() => setSearchError(null)} className="text-neutral-400 hover:text-white">✕</button>
+          </div>
+        )}
+
+        {/* Feed Controls & Recommendation Stream Switcher */}
+        <div className="flex items-center justify-between border-b border-neutral-900 pb-4 font-mono text-xs">
+          <div className="flex items-center gap-3">
+            <span className="text-neutral-500 uppercase tracking-wider font-semibold">Feed Stream:</span>
+            
+            {/* Feed Recommendation Toggle */}
+            <div className="flex items-center p-0.5 rounded-lg bg-neutral-900 border border-neutral-800">
               <button
                 onClick={() => setRecMode('history')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors font-medium ${
+                className={`px-3 py-1 rounded-md transition-colors ${
                   recMode === 'history'
-                    ? 'bg-white text-neutral-950 shadow-sm'
+                    ? 'bg-white text-neutral-950 font-bold'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
-                <Target className="w-3.5 h-3.5 text-cyan-500" />
-                <span>For You (History-Based)</span>
+                For You
               </button>
 
               <button
                 onClick={() => setRecMode('random')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors font-medium ${
+                className={`px-3 py-1 rounded-md transition-colors ${
                   recMode === 'random'
-                    ? 'bg-white text-neutral-950 shadow-sm'
+                    ? 'bg-white text-neutral-950 font-bold'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
-                <Dices className="w-3.5 h-3.5 text-purple-400" />
-                <span>Discovery (Random)</span>
+                Discover
               </button>
             </div>
-
-            <span className="px-2 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 font-mono text-[11px] text-neutral-400">
-              {filteredStories.length} Articles
-            </span>
           </div>
 
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            {/* Filter Local History Search Input */}
-            <div className="relative flex-1 md:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-500" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Filter feed history..."
-                className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-xs font-mono text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-700 transition-colors"
-              />
-            </div>
-
+          <div className="flex items-center gap-2">
+            <span className="text-neutral-500 font-mono text-[11px] hidden sm:inline">
+              Showing {stories.length} stories
+            </span>
             <button
               onClick={fetchFeed}
+              disabled={loading}
               className="p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
               title="Refresh Recommendation Stream"
             >
@@ -221,14 +219,11 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Feed Cards List with Bi-Directional Scroll Physics */}
-        {loading || isSearchingLive ? (
+        {/* Stories Grid Feed */}
+        {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="bg-neutral-900/40 border border-neutral-800 rounded-xl p-6 h-80 flex flex-col justify-between animate-pulse"
-              >
+            {[1, 2, 4, 4].map((n) => (
+              <div key={n} className="bg-neutral-900/40 border border-neutral-800 rounded-xl p-6 h-80 flex flex-col justify-between animate-pulse">
                 <div className="space-y-3">
                   <div className="h-4 w-20 bg-neutral-800 rounded"></div>
                   <div className="h-6 w-3/4 bg-neutral-800 rounded"></div>
@@ -241,27 +236,23 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-        ) : filteredStories.length === 0 ? (
-          /* Clean Minimal Empty State */
-          <div className="bg-neutral-900/40 border border-neutral-800 rounded-xl p-12 text-center my-6 max-w-lg mx-auto space-y-4">
-            <Layers className="w-10 h-10 text-neutral-600 mx-auto" />
-            <div className="space-y-1">
-              <h3 className="font-sans text-base font-bold text-white">No news found for this search</h3>
-              <p className="text-xs font-mono text-neutral-400">
-                Type a topic above (e.g., "Virat Kohli", "IPL 2026") or upload a news document.
-              </p>
-            </div>
-            <Link
-              href="/ingest"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white text-neutral-950 font-mono text-xs font-bold hover:bg-neutral-200 transition-colors"
+        ) : stories.length === 0 ? (
+          <div className="text-center py-16 bg-neutral-900/30 border border-neutral-800 rounded-2xl max-w-lg mx-auto space-y-3">
+            <TrendingUp className="w-8 h-8 text-neutral-500 mx-auto" />
+            <h3 className="font-mono text-sm font-bold text-neutral-200">No Stories Available</h3>
+            <p className="text-xs text-neutral-400 font-mono px-4">
+              Try searching a broad keyword above (e.g. "AI", "IPL", "Tech", "Space") or select another category tab.
+            </p>
+            <button
+              onClick={() => { setSelectedCategory('All'); fetchFeed(); }}
+              className="mt-2 px-4 py-2 rounded-lg bg-white text-neutral-950 font-mono text-xs font-bold hover:bg-neutral-200 transition-colors"
             >
-              <UploadCloud className="w-4 h-4" />
-              <span>Scan Document or Image</span>
-            </Link>
+              Reset to All Headlines
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredStories.map((story, idx) => (
+            {stories.map((story, idx) => (
               <StoryCard
                 key={story.id}
                 story={story}
@@ -274,16 +265,8 @@ export default function HomePage() {
             ))}
           </div>
         )}
-      </main>
 
-      {/* News Co-Pilot Slide-Over Drawer */}
-      <NewsCoPilotDrawer
-        isOpen={isCoPilotOpen}
-        onClose={() => setIsCoPilotOpen(false)}
-        story={selectedCoPilotStory}
-        currentLanguage={currentLanguage}
-        isDemoMode={isDemoMode}
-      />
+      </main>
 
       {/* Footer */}
       <footer className="w-full border-t border-neutral-900 py-6 px-4 bg-neutral-950 mt-auto">
@@ -297,6 +280,14 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+
+      {/* Ask Co-Pilot Slide-over Drawer */}
+      <NewsCoPilotDrawer
+        story={selectedCoPilotStory}
+        isOpen={isCoPilotOpen}
+        onClose={() => setIsCoPilotOpen(false)}
+        currentLanguage={currentLanguage}
+      />
     </div>
   );
 }
