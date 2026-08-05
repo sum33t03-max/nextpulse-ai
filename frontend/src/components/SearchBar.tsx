@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, Cpu, Sparkles, TrendingUp } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -89,25 +89,28 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearchSubmit, isSearchin
 
   return (
     <div ref={containerRef} className="relative w-full mt-4">
-      {/* Prominent Search Bar Container */}
-      <form onSubmit={handleSubmit} className="relative">
-        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-neutral-900 border border-neutral-800 focus-within:border-neutral-700 transition-all shadow-md">
-          <Search className="w-4 h-4 text-cyan-400 ml-3 shrink-0" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => {
-              if (suggestions.length > 0) setShowDropdown(true);
-            }}
-            onKeyDown={handleKeyDown}
-            placeholder="Search any news topic, keyword, or breaking event..."
-            className="flex-1 bg-transparent px-2 py-2 text-xs md:text-sm font-mono text-white placeholder-neutral-500 focus:outline-none"
-          />
+      {/* Prominent Responsive Search Bar Container */}
+      <form onSubmit={handleSubmit} className="relative w-full">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-1.5 rounded-xl bg-neutral-900 border border-neutral-800 focus-within:border-neutral-700 transition-all shadow-md w-full">
+          <div className="flex items-center flex-1 w-full">
+            <Search className="w-4 h-4 text-cyan-400 ml-3 shrink-0" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => {
+                if (suggestions.length > 0) setShowDropdown(true);
+              }}
+              onKeyDown={handleKeyDown}
+              placeholder="Search any news topic, keyword, or breaking event..."
+              className="w-full bg-transparent px-2 py-2 text-xs md:text-sm font-mono text-white placeholder-neutral-500 focus:outline-none"
+            />
+          </div>
+
           <button
             type="submit"
             disabled={isSearching || !query.trim()}
-            className="px-5 py-2 rounded-lg bg-cyan-500 text-neutral-950 font-mono text-xs font-bold hover:bg-cyan-400 transition-colors disabled:opacity-40 flex items-center gap-1.5 shrink-0 shadow-sm"
+            className="w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-lg bg-cyan-500 text-neutral-950 font-mono text-xs font-bold hover:bg-cyan-400 transition-colors disabled:opacity-40 flex items-center justify-center gap-1.5 shrink-0 shadow-sm"
           >
             {isSearching ? (
               <>

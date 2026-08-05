@@ -26,7 +26,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
   onOpenCoPilot,
   onDeleteStory,
 }) => {
-  const [tone, setTone] = useState<CardTone>('60w');
+  const [tone, setTone] = useState<CardTone>('brief');
   const [isBookmarked, setIsBookmarked] = useState(story.isBookmarked);
   const [copied, setCopied] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -77,23 +77,23 @@ export const StoryCard: React.FC<StoryCardProps> = ({
       viewport={{ once: false, amount: 0.2 }}
       transition={{ type: "spring", stiffness: 70, damping: 15 }}
       style={{ willChange: 'transform, opacity' }}
-      className={`minimal-card rounded-xl p-5 md:p-6 flex flex-col justify-between hover:-translate-y-1 transition-all duration-300 ease-out hover:border-neutral-700 hover:shadow-xl relative ${
+      className={`minimal-card rounded-xl p-4 md:p-6 flex flex-col justify-between hover:-translate-y-1 transition-all duration-300 ease-out hover:border-neutral-700 hover:shadow-xl relative ${
         isDeleting ? 'opacity-0 scale-95 transition-all duration-300' : ''
       }`}
     >
       <div className="space-y-4">
         
-        {/* Top Header Row: Category Badge, Source Publisher Badge, Read Time, Actions */}
-        <div className="flex items-center justify-between gap-2 border-b border-neutral-800/60 pb-3">
-          <div className="flex items-center gap-2 overflow-hidden flex-wrap">
+        {/* Top Header Row: Responsive Flex-Wrap Metadata */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-neutral-800/60 pb-3">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-full bg-neutral-800 border border-neutral-700 text-neutral-200 font-mono text-[11px] font-medium shrink-0">
               {story.category}
             </span>
 
-            {/* Publisher Source Badge */}
+            {/* Publisher Source Badge with safe truncation */}
             <span className="px-2.5 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 font-mono text-[11px] font-medium shrink-0 flex items-center gap-1">
               <Globe className="w-3 h-3 text-cyan-400 shrink-0" />
-              <span className="truncate max-w-[120px]">{story.source}</span>
+              <span className="truncate max-w-[100px] sm:max-w-[140px]">{story.source}</span>
             </span>
 
             <div className="flex items-center gap-1 text-neutral-400 font-mono text-[11px] shrink-0">
@@ -102,31 +102,33 @@ export const StoryCard: React.FC<StoryCardProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-1">
-            {/* Tone Switcher (60w | ELI5 | Deep Dive) */}
+          <div className="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
+            {/* Tone Switcher (Brief | ELI5 | Deep) */}
             <ToneToggle currentTone={tone} onToneChange={setTone} />
 
-            {/* Trash Delete Action */}
-            <button
-              onClick={handleDeleteClick}
-              className="p-1.5 rounded-md text-neutral-500 hover:text-red-400 hover:bg-neutral-800 transition-colors ml-1"
-              title="Delete Article"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
+            <div className="flex items-center gap-1 shrink-0">
+              {/* Trash Delete Action */}
+              <button
+                onClick={handleDeleteClick}
+                className="p-1.5 rounded-md text-neutral-500 hover:text-red-400 hover:bg-neutral-800 transition-colors ml-1"
+                title="Delete Article"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
 
-            {/* Bookmark Action */}
-            <button
-              onClick={handleBookmarkClick}
-              className={`p-1.5 rounded-md transition-colors ${
-                isBookmarked
-                  ? 'text-cyan-400 bg-cyan-950/40'
-                  : 'text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800'
-              }`}
-              title={isBookmarked ? 'Remove Bookmark' : 'Bookmark Article'}
-            >
-              <Bookmark className={`w-3.5 h-3.5 ${isBookmarked ? 'fill-cyan-400' : ''}`} />
-            </button>
+              {/* Bookmark Action */}
+              <button
+                onClick={handleBookmarkClick}
+                className={`p-1.5 rounded-md transition-colors ${
+                  isBookmarked
+                    ? 'text-cyan-400 bg-cyan-950/40'
+                    : 'text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800'
+                }`}
+                title={isBookmarked ? 'Remove Bookmark' : 'Bookmark Article'}
+              >
+                <Bookmark className={`w-3.5 h-3.5 ${isBookmarked ? 'fill-cyan-400' : ''}`} />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -138,8 +140,8 @@ export const StoryCard: React.FC<StoryCardProps> = ({
         {/* Card View Mode Body Content (Cross-fade Transition) */}
         <div className="min-h-[140px] text-xs md:text-sm font-sans text-neutral-300 transition-opacity duration-200 ease-in-out">
           
-          {/* MODE 1: 60-Word HUD Takeaways */}
-          {tone === '60w' && (
+          {/* MODE 1: Smart Brief / Executive Summary */}
+          {(tone === '60w' || tone === 'brief') && (
             <ul className="space-y-2">
               {summary60w.map((bullet, i) => (
                 <li key={i} className="flex items-start gap-2 leading-relaxed">
@@ -205,11 +207,11 @@ export const StoryCard: React.FC<StoryCardProps> = ({
 
       </div>
 
-      {/* Card Footer Action Bar */}
-      <div className="pt-4 mt-4 border-t border-neutral-800/60 flex items-center justify-between gap-2 font-mono text-xs flex-wrap">
+      {/* Card Footer Action Bar: Responsive Flex-Wrap */}
+      <div className="pt-4 mt-4 border-t border-neutral-800/60 flex items-center justify-between gap-2.5 font-mono text-xs flex-wrap">
         
-        {/* Left Actions: Voice Anchor & Ask Co-Pilot */}
-        <div className="flex items-center gap-2">
+        {/* Left Actions: Voice Anchor, Ask Co-Pilot, Verify Source */}
+        <div className="flex items-center gap-2 flex-wrap">
           {/* Voice Anchor Audio Player */}
           <VoiceAnchor text={voiceText} language={currentLanguage} />
 
@@ -217,7 +219,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
           {onOpenCoPilot && (
             <button
               onClick={() => onOpenCoPilot(story)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors text-xs font-mono font-medium"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors text-xs font-mono font-medium shrink-0"
             >
               <Bot className="w-3.5 h-3.5 text-cyan-400" />
               <span>Ask Co-Pilot</span>
@@ -230,7 +232,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
               href={story.originalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors text-xs font-mono font-medium"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors text-xs font-mono font-medium shrink-0"
               title={`Verify original story on ${story.source}`}
             >
               <span>Verify Source</span>
@@ -240,7 +242,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
         </div>
 
         {/* Right Actions: Bias Rating & Share */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <BiasMeter rating={story.biasRating} score={story.biasScore} />
 
           <button

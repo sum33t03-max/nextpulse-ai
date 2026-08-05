@@ -141,7 +141,7 @@ export default function HomePage() {
             Search any news topic or headline
           </h1>
           <p className="text-sm font-sans text-neutral-400 leading-relaxed">
-            Type any breaking news topic, event, or keyword to instantly fetch, analyze, and summarize live news into 60-word cards with explicit bias percentages.
+            Type any breaking news topic, event, or keyword to instantly fetch, analyze, and summarize live news into adaptive executive briefs with explicit bias percentages.
           </p>
 
           {/* Prominent Live News Search Engine Bar with Autocomplete Dropdown */}
