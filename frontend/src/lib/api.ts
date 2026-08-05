@@ -296,6 +296,16 @@ export const api = {
     }
 
     try {
+      // First try relative Next.js native API route /api/ingest (works serverlessly on Vercel)
+      const res = await axios.post('/api/ingest', formData);
+      if (res.data && res.data.title) {
+        return res.data;
+      }
+    } catch (err) {
+      console.warn('Next.js native /api/ingest failed, attempting Python backend /api/ingest/document:', err);
+    }
+
+    try {
       const response = await apiClient.post('/ingest/document', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
