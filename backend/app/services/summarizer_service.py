@@ -28,7 +28,9 @@ ALLOWED_CATEGORIES = [
 LANGUAGE_NAMES = {
     "en": "English",
     "hi": "Hindi",
+    "gu": "Gujarati",
     "es": "Spanish",
+    "fr": "French",
     "ja": "Japanese",
     "de": "German"
 }

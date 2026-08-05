@@ -37,7 +37,9 @@ export const VoiceAnchor: React.FC<VoiceAnchorProps> = ({ textToRead, text, lang
       const langMap: Record<LanguageCode, string> = {
         en: 'en-US',
         hi: 'hi-IN',
+        gu: 'gu-IN',
         es: 'es-ES',
+        fr: 'fr-FR',
         ja: 'ja-JP',
         de: 'de-DE',
       };

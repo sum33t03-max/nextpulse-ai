@@ -12,7 +12,9 @@ interface LanguageSelectProps {
 const LANGUAGES: { code: LanguageCode; label: string; flag: string }[] = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
   { code: 'hi', label: 'हिंदी (Hindi)', flag: '🇮🇳' },
+  { code: 'gu', label: 'ગુજરાતી (Gujarati)', flag: '🇮🇳' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
   { code: 'ja', label: '日本語 (Japanese)', flag: '🇯🇵' },
   { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
 ];

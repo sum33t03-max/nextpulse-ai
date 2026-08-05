@@ -12,6 +12,16 @@ const ALLOWED_CATEGORIES = [
   "Crime & Law"
 ];
 
+const LANG_MAP: Record<string, string> = {
+  en: 'English',
+  hi: 'Hindi',
+  gu: 'Gujarati',
+  es: 'Spanish',
+  fr: 'French',
+  ja: 'Japanese',
+  de: 'German'
+};
+
 export async function POST(req: Request) {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
@@ -39,10 +49,7 @@ export async function POST(req: Request) {
       const formData = await req.formData();
       const file = formData.get('file') as File | null;
       const lang = (formData.get('target_language') as string) || 'en';
-      if (lang === 'hi') targetLanguage = 'Hindi';
-      else if (lang === 'es') targetLanguage = 'Spanish';
-      else if (lang === 'ja') targetLanguage = 'Japanese';
-      else if (lang === 'de') targetLanguage = 'German';
+      targetLanguage = LANG_MAP[lang.toLowerCase()] || 'English';
 
       if (file) {
         filename = file.name || filename;
@@ -55,25 +62,23 @@ export async function POST(req: Request) {
       rawText = body.text || '';
       rawUrl = body.url || '';
       const lang = body.target_language || 'en';
-      if (lang === 'hi') targetLanguage = 'Hindi';
-      else if (lang === 'es') targetLanguage = 'Spanish';
-      else if (lang === 'ja') targetLanguage = 'Japanese';
-      else if (lang === 'de') targetLanguage = 'German';
+      targetLanguage = LANG_MAP[lang.toLowerCase()] || 'English';
     }
 
     const contentsParts: any[] = [];
 
-    // System prompt instructing Gemini Vision OCR & Deep Analysis
-    const systemPrompt = `You are an expert news analyst and OCR vision intelligence synthesizer for NextPulse AI.
-Examine the provided content/document/image payload and produce a structured JSON response in ${targetLanguage}.
+    // System prompt instructing Gemini Vision OCR & Deep Multilingual Analysis
+    const systemPrompt = `You are a multilingual news analyst and OCR vision intelligence synthesizer for NextPulse AI.
+Examine the provided content/document/image payload and produce a structured JSON response strictly in the target language: "${targetLanguage}".
+Do not keep the summary, title, ELI5 points, or deep dive in English unless targetLanguage is "English".
 
 Required JSON Schema:
 {
   "title": "Main headline found in the image or text payload in ${targetLanguage}",
   "summary": [
-    "Executive summary bullet takeaway 1",
-    "Executive summary bullet takeaway 2",
-    "Executive summary bullet takeaway 3"
+    "Executive summary bullet takeaway 1 in ${targetLanguage}",
+    "Executive summary bullet takeaway 2 in ${targetLanguage}",
+    "Executive summary bullet takeaway 3 in ${targetLanguage}"
   ],
   "category": "One of: World / Geopolitics, Technology & AI, Economy & Business, Science & Space, Health & Biotech, Environment & Energy, Arts & Entertainment, Sports, Crime & Law",
   "source": "Name of the news publication visible in the image/text (e.g. 'The Hindu', 'Times of India', 'Reuters', 'TechCrunch')",
@@ -81,8 +86,8 @@ Required JSON Schema:
   "biasRating": "Neutral",
   "biasScore": 90,
   "summaryEli5": [
-    "Simple Explain-Like-I-Am-5 bullet point 1",
-    "Simple Explain-Like-I-Am-5 bullet point 2"
+    "Simple Explain-Like-I-Am-5 bullet point 1 in ${targetLanguage}",
+    "Simple Explain-Like-I-Am-5 bullet point 2 in ${targetLanguage}"
   ],
   "summaryDeepDive": "Detailed narrative deep-dive synthesis in ${targetLanguage}.",
   "smartGlossary": [

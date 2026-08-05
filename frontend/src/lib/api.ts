@@ -39,9 +39,10 @@ export const api = {
     category?: string,
     scope?: string,
     location?: string,
-    isDemoMode: boolean = false
+    isDemoMode: boolean = false,
+    targetLanguage: string = 'en'
   ): Promise<Story[]> {
-    return this.getRecommendations('history', category, scope, location, isDemoMode);
+    return this.getRecommendations('history', category, scope, location, isDemoMode, targetLanguage);
   },
 
   async getRecommendations(
@@ -49,7 +50,8 @@ export const api = {
     category?: string,
     scope?: string,
     location?: string,
-    isDemoMode: boolean = false
+    isDemoMode: boolean = false,
+    targetLanguage: string = 'en'
   ): Promise<Story[]> {
     if (isDemoMode) {
       let filtered = [...MOCK_STORIES];
@@ -67,7 +69,7 @@ export const api = {
     }
 
     try {
-      const params: any = { mode };
+      const params: any = { mode, target_language: targetLanguage || 'en' };
       if (category && category !== 'All') params.category = category;
       if (scope) params.scope = scope;
       if (location) params.location = location;
@@ -110,7 +112,8 @@ export const api = {
     category?: string,
     scope?: string,
     location?: string,
-    isDemoMode: boolean = false
+    isDemoMode: boolean = false,
+    targetLanguage: string = 'en'
   ): Promise<Story[]> {
     const cleaned = cleanSearchQuery(query);
 
@@ -153,12 +156,13 @@ export const api = {
         query: cleaned || query,
         category: category !== 'All' ? category : undefined,
         scope,
-        location
+        location,
+        target_language: targetLanguage || 'en'
       });
       return response.data;
     } catch (error) {
       console.warn('Live news search API failed, returning mock search result:', error);
-      return this.getRecommendations('random', category, scope, location, true);
+      return this.getRecommendations('random', category, scope, location, true, targetLanguage);
     }
   },
 

@@ -1,4 +1,4 @@
-export type LanguageCode = 'en' | 'hi' | 'es' | 'ja' | 'de';
+export type LanguageCode = 'en' | 'hi' | 'gu' | 'es' | 'fr' | 'ja' | 'de';
 
 export type CardTone = '60w' | 'brief' | 'eli5' | 'deepdive';
 

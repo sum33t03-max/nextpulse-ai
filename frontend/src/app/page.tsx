@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { HeaderHUD } from '../components/HeaderHUD';
 import { StoryCard } from '../components/StoryCard';
 import { NewsCoPilotDrawer } from '../components/NewsCoPilotDrawer';
@@ -9,7 +9,6 @@ import { SearchBar } from '../components/SearchBar';
 import { Story, LanguageCode } from '../types';
 import { api } from '../lib/api';
 import { Sparkles, RefreshCw, Cpu, Bot, Bookmark, TrendingUp } from 'lucide-react';
-import Link from 'next/link';
 
 export default function Home() {
   const [stories, setStories] = useState<Story[]>([]);
@@ -33,38 +32,52 @@ export default function Home() {
   const [selectedCoPilotStory, setSelectedCoPilotStory] = useState<Story | null>(null);
   const [isCoPilotOpen, setIsCoPilotOpen] = useState<boolean>(false);
 
-  const fetchFeed = async () => {
+  const fetchFeed = useCallback(async (langToUse?: LanguageCode) => {
     setLoading(true);
+    const activeLang = langToUse || currentLanguage;
     try {
-      const data = await api.getRecommendations(recMode, selectedCategory, selectedScope, locationInput, isDemoMode);
+      const data = await api.getRecommendations(recMode, selectedCategory, selectedScope, locationInput, isDemoMode, activeLang);
       setStories(data);
     } catch (err) {
       console.error('Failed to load feed:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [recMode, selectedCategory, selectedScope, locationInput, isDemoMode, currentLanguage]);
 
   useEffect(() => {
-    fetchFeed();
-  }, [recMode, selectedCategory, selectedScope, locationInput, isDemoMode]);
+    if (!searchQuery.trim()) {
+      fetchFeed();
+    }
+  }, [fetchFeed, searchQuery]);
+
+  const handleLanguageChange = (newLang: LanguageCode) => {
+    setCurrentLanguage(newLang);
+    setSearchError(null);
+    if (searchQuery.trim()) {
+      handleLiveNewsSearch(searchQuery, newLang);
+    }
+  };
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
     setSearchError(null);
     if (category !== 'All') {
       setIsSearchingLive(true);
-      api.searchLiveNews('', category, selectedScope, locationInput, isDemoMode)
+      api.searchLiveNews(searchQuery || '', category, selectedScope, locationInput, isDemoMode, currentLanguage)
         .then((res) => {
           if (res && res.length > 0) setStories(res);
         })
         .finally(() => setIsSearchingLive(false));
+    } else if (!searchQuery.trim()) {
+      fetchFeed();
     }
   };
 
-  const handleLiveNewsSearch = async (query: string) => {
+  const handleLiveNewsSearch = async (query: string, overrideLang?: LanguageCode) => {
     if (!query.trim()) return;
 
+    const langToUse = overrideLang || currentLanguage;
     setSearchQuery(query);
     setIsSearchingLive(true);
     setSearchError(null);
@@ -75,7 +88,8 @@ export default function Home() {
         selectedCategory,
         selectedScope,
         locationInput,
-        isDemoMode
+        isDemoMode,
+        langToUse
       );
 
       if (liveResults && liveResults.length > 0) {
@@ -105,7 +119,7 @@ export default function Home() {
     setIsCoPilotOpen(true);
   };
 
-  const bookmarkedCount = stories.filter((s) => s.isBookmarked).length;
+  const bookmarkedCount = stories.filter((s) => s?.isBookmarked).length;
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col relative font-sans">
@@ -115,10 +129,10 @@ export default function Home() {
         onComplete={() => setReplaySplash(false)}
       />
 
-      {/* Header Bar with Regional Scope, Category Filter & Replay Splash Trigger */}
+      {/* Header Bar with Regional Scope, Category Filter & Language Selector */}
       <HeaderHUD
         currentLanguage={currentLanguage}
-        onLanguageChange={setCurrentLanguage}
+        onLanguageChange={handleLanguageChange}
         selectedCategory={selectedCategory}
         onCategorySelect={handleCategorySelect}
         bookmarkCount={bookmarkedCount}
@@ -159,7 +173,7 @@ export default function Home() {
               <Cpu className="w-4 h-4 text-cyan-400 animate-spin" />
               <div>
                 <p className="text-white font-medium">Querying Google News RSS & Gemini 2.5 Flash...</p>
-                <p className="text-neutral-500 text-[11px]">Fetching live articles & synthesizing adaptive HUD cards...</p>
+                <p className="text-neutral-500 text-[11px]">Fetching live articles & synthesizing adaptive HUD cards in {currentLanguage.toUpperCase()}...</p>
               </div>
             </div>
           </div>
@@ -209,7 +223,7 @@ export default function Home() {
               Showing {stories.length} stories
             </span>
             <button
-              onClick={fetchFeed}
+              onClick={() => fetchFeed()}
               disabled={loading}
               className="p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
               title="Refresh Recommendation Stream"
@@ -222,7 +236,7 @@ export default function Home() {
         {/* Stories Grid Feed */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[1, 2, 4, 4].map((n) => (
+            {[1, 2, 3, 4].map((n) => (
               <div key={n} className="bg-neutral-900/40 border border-neutral-800 rounded-xl p-6 h-80 flex flex-col justify-between animate-pulse">
                 <div className="space-y-3">
                   <div className="h-4 w-20 bg-neutral-800 rounded"></div>
@@ -254,7 +268,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {stories.map((story, idx) => (
               <StoryCard
-                key={story.id}
+                key={story?.id || `story-${idx}`}
                 story={story}
                 index={idx}
                 currentLanguage={currentLanguage}
