@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,12 +7,15 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    color-scheme: dark;
   }
   body {
     background-color: #09090b;
     color: #f4f4f5;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden;
+    selection-background-color: #06b6d4;
+    selection-color: #09090b;
   }
 }
 
@@ -35,26 +40,67 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+/* Ambient Ambient Mesh Glow Background Effects */
+.glow-bg {
+  position: relative;
+}
+
+.glow-bg::before {
+  content: '';
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, rgba(168, 85, 247, 0.08) 50%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* Modern Minimal Vercel / Arc Card & UI Utilities */
 .minimal-card {
-  background: rgba(18, 18, 20, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(15, 15, 18, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
   transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, border-color, box-shadow;
 }
 
 .minimal-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.7);
+  border-color: rgba(6, 182, 212, 0.3);
+  box-shadow: 0 12px 35px -4px rgba(0, 0, 0, 0.8), 0 0 15px rgba(6, 182, 212, 0.1);
+}
+
+.glass-panel {
+  background: rgba(18, 18, 22, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .minimal-pill {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
+}
+
+/* Shimmer Loading Skeleton Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
 }
 
 /* Hardware-Accelerated Cascading Entrance Animation */
@@ -105,10 +151,10 @@ html.lenis, html.lenis body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #06b6d4;
 }
 
-/* Subtle Waveform Animation */
+/* Subtle Waveform Animation for Voice Anchor */
 @keyframes waveAnim {
   0%, 100% { height: 4px; }
   50% { height: 16px; }
@@ -118,6 +164,12 @@ html.lenis, html.lenis body {
 .animate-wave-2 { animation: waveAnim 0.8s ease-in-out 0.2s infinite; }
 .animate-wave-3 { animation: waveAnim 0.8s ease-in-out 0.4s infinite; }
 .animate-wave-4 { animation: waveAnim 0.8s ease-in-out 0.1s infinite; }
+
+/* Focus Glow Utility */
+.focus-glow:focus-within {
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+}
 
 /* Accessibility: Respect Prefers Reduced Motion */
 @media (prefers-reduced-motion: reduce) {

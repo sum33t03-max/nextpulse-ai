@@ -51,12 +51,17 @@ export default function Home() {
     }
   }, [fetchFeed, searchQuery]);
 
-  const handleLanguageChange = (newLang: LanguageCode) => {
+  const handleLanguageChange = async (newLang: LanguageCode) => {
     setCurrentLanguage(newLang);
     setSearchError(null);
+
     if (searchQuery.trim()) {
       handleLiveNewsSearch(searchQuery, newLang);
+      return;
     }
+
+    // Batch translate & fetch feed in a single API call via backend batch translator
+    await fetchFeed(newLang);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -142,7 +147,6 @@ export default function Home() {
         onScopeChange={setSelectedScope}
         locationInput={locationInput}
         onLocationChange={setLocationInput}
-        onReplaySplash={() => setReplaySplash(true)}
       />
 
       {/* Main Content Container */}

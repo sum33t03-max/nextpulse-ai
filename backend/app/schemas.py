@@ -1,4 +1,4 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, field_validator
 from typing import List, Optional, Dict, Any
 
 class PerspectiveItem(BaseModel):
@@ -33,6 +33,31 @@ class StorySchema(BaseModel):
     smartGlossary: Optional[List[GlossaryItem]] = None
     voiceAudioText: Optional[str] = None
     isBookmarked: bool = False
+
+    @field_validator('biasScore', mode='before')
+    @classmethod
+    def parse_bias_score(cls, v: Any) -> int:
+        import unicodedata
+        if isinstance(v, int):
+            return v
+        if v is None:
+            return 90
+        try:
+            s = str(v).strip()
+            if s.isdigit():
+                return min(max(int(s), 0), 100)
+            converted = []
+            for char in s:
+                try:
+                    converted.append(str(unicodedata.digit(char)))
+                except ValueError:
+                    pass
+            ascii_digits = "".join(converted)
+            if ascii_digits:
+                return min(max(int(ascii_digits), 0), 100)
+        except Exception:
+            pass
+        return 90
 
     class Config:
         from_attributes = True

@@ -262,7 +262,7 @@ export const api = {
     return this.ingest({ title, text, target_language: targetLanguage }, isDemoMode);
   },
 
-  async ingestDocument(formData: FormData, isDemoMode: boolean = false): Promise<any> {
+  async ingestDocument(formData: FormData, targetLanguage: string = 'en', isDemoMode: boolean = false): Promise<any> {
     if (isDemoMode) {
       const file = formData.get('file') as File;
       const fileName = file ? file.name : 'scanned_news_doc.png';
@@ -300,10 +300,11 @@ export const api = {
     }
 
     try {
+      formData.append('target_language', targetLanguage);
       // First try relative Next.js native API route /api/ingest (works serverlessly on Vercel)
       const res = await axios.post('/api/ingest', formData);
-      if (res.data && res.data.title) {
-        return res.data;
+      if (res.data && (res.data.article || res.data.title)) {
+        return res.data.article || res.data;
       }
     } catch (err) {
       console.warn('Next.js native /api/ingest failed, attempting Python backend /api/ingest/document:', err);
@@ -322,8 +323,8 @@ export const api = {
     }
   },
 
-  async ingestMedia(formData: FormData): Promise<Story> {
-    return this.ingestDocument(formData, false);
+  async ingestMedia(formData: FormData, targetLanguage: string = 'en'): Promise<Story> {
+    return this.ingestDocument(formData, targetLanguage, false);
   },
 
   async getChatHistory(articleId: string): Promise<{ id: number; sender: 'user' | 'assistant'; message: string; created_at: string }[]> {
@@ -371,6 +372,29 @@ export const api = {
           "What is the expected future outlook?"
         ]
       };
+    }
+  },
+
+  async translateCard(
+    story: Story,
+    targetLanguage: string
+  ): Promise<{ title: string; summary60w: string[]; summaryEli5: string[]; summaryDeepDive: string; voiceAudioText: string }> {
+    const textToTranslate = story.summaryDeepDive || (story.summary60w ? story.summary60w.join('. ') : story.title);
+    try {
+      const res = await axios.post('/api/summarize', {
+        title: story.title,
+        text: textToTranslate,
+        targetLanguage,
+      });
+      return res.data;
+    } catch (err) {
+      console.warn('Next.js /api/summarize failed, calling backend /summarize:', err);
+      const res = await apiClient.post('/summarize', {
+        title: story.title,
+        content: textToTranslate,
+        target_language: targetLanguage,
+      });
+      return res.data;
     }
   }
 };

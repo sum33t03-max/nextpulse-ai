@@ -19,6 +19,7 @@ def get_recommendations(
     category: Optional[str] = None,
     scope: Optional[str] = None,
     location: Optional[str] = None,
+    target_language: Optional[str] = "en",
     db: Session = Depends(get_db)
 ):
     """
@@ -133,10 +134,19 @@ def get_recommendations(
         }
         result.append(story_dict)
 
+    if target_language and target_language.lower() != "en" and result:
+        to_translate = result[:3]
+        translated_top = summarizer.translate_stories(to_translate, target_language)
+        result = translated_top + result[3:]
+
     # Dynamic Gemini 2.5 Flash Generation if fewer than 2 matching stories are found
     if len(result) < 2 and (category or location):
         target_cat = category if (category and category.lower() != "all") else "World / Geopolitics"
-        gen_items = summarizer.generate_category_news(category=target_cat, location=location)
+        gen_items = summarizer.generate_category_news(
+            category=target_cat,
+            location=location,
+            target_language=target_language or "en"
+        )
 
         for item in gen_items:
             story_obj = StoryDB(

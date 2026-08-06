@@ -17,6 +17,7 @@ export interface TranslationContent {
   summary60w: string[];
   summaryEli5: string[];
   summaryDeepDive: string;
+  voiceAudioText?: string;
 }
 
 export interface Story {
@@ -41,4 +42,5 @@ export interface Story {
   smartGlossary?: GlossaryItem[];
   voiceAudioText?: string;
   isBookmarked: boolean;
+  isTranslating?: boolean;
 }

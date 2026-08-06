@@ -86,7 +86,7 @@ export default function IngestPage() {
       const formData = new FormData();
       formData.append('file', docFile);
       formData.append('target_language', currentLanguage);
-      const res = await api.ingestDocument(formData, isDemoMode);
+      const res = await api.ingestDocument(formData, currentLanguage, isDemoMode);
       if (res && res.status === 'error') {
         setErrorMsg(res.message);
       } else {
@@ -151,9 +151,9 @@ export default function IngestPage() {
               <Sparkles className="w-5 h-5 text-cyan-400" />
             </div>
             <div>
-              <h1 className="font-sans text-xl font-bold text-white">Ingestion Studio</h1>
+              <h1 className="font-sans text-xl font-bold text-white">News Analyzer</h1>
               <p className="text-xs font-mono text-neutral-400 mt-0.5">
-                Transform raw news links, text, or document images into Smart Brief executive summaries.
+                Paste a link, type text, or upload a news image to get an instant AI summary.
               </p>
             </div>
           </div>

@@ -40,6 +40,27 @@ export const StoryCard: React.FC<StoryCardProps> = ({
   // Strict defensive guard for story object
   if (!story || typeof story !== 'object') return null;
 
+  // Inline skeleton loading state while Gemini/Groq translates this card
+  if (story.isTranslating) {
+    return (
+      <div className="bg-neutral-900/40 border border-neutral-800 rounded-xl p-6 h-80 flex flex-col justify-between animate-pulse">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono">
+            <Globe className="w-3.5 h-3.5 animate-spin text-cyan-400" />
+            <span>Translating card to {currentLanguage.toUpperCase()}...</span>
+          </div>
+          <div className="h-6 w-3/4 bg-neutral-800 rounded"></div>
+        </div>
+        <div className="space-y-2">
+          <div className="h-3 w-full bg-neutral-800/60 rounded"></div>
+          <div className="h-3 w-full bg-neutral-800/60 rounded"></div>
+          <div className="h-3 w-2/3 bg-neutral-800/60 rounded"></div>
+        </div>
+        <div className="h-8 w-full bg-neutral-800/40 rounded"></div>
+      </div>
+    );
+  }
+
   // Defensive field fallbacks
   const category = story?.category || "General News";
   

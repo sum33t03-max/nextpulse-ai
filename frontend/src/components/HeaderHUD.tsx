@@ -21,7 +21,6 @@ interface HeaderHUDProps {
   onScopeChange?: (scope: string) => void;
   locationInput?: string;
   onLocationChange?: (loc: string) => void;
-  onReplaySplash?: () => void;
 }
 
 const CATEGORIES = [
@@ -49,7 +48,6 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
   onScopeChange,
   locationInput = '',
   onLocationChange,
-  onReplaySplash,
 }) => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
@@ -109,18 +107,6 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
           {/* Controls Right Group */}
           <div className="flex items-center gap-1.5 sm:gap-2.5">
             
-            {/* Replay Intro Splash Button */}
-            {onReplaySplash && (
-              <button
-                onClick={onReplaySplash}
-                className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-xs font-mono transition-colors"
-                title="Replay Full-Screen Intro Splash"
-              >
-                <Play className="w-3 h-3 text-cyan-400 fill-cyan-400" />
-                <span>Replay Intro</span>
-              </button>
-            )}
-
             {/* Demo Mode Switch Toggle */}
             {onDemoModeToggle && (
               <button

@@ -23,8 +23,8 @@ module.exports = {
         }
       },
       fontFamily: {
-        mono: ['var(--font-space-mono)', 'monospace'],
-        sans: ['var(--font-inter)', 'sans-serif'],
+        mono: ['Outfit', 'Inter', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
       },
       boxShadow: {
         'neon-cyan': '0 0 15px rgba(0, 240, 255, 0.4)',
